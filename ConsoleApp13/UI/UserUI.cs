@@ -70,7 +70,7 @@ namespace ConsoleApp13.UI
             TransportCompanySystem transportCompany = null;
             try
             {
-                transportCompany = new TransportCompanySystem(cityFrom, cityTo, car, transportType, dateToReceve, email);
+                transportCompany = new TransportCompanySystem(cityFrom, cityTo, car, transportType, dateToReceve, email, _userPanel.GetAllWays().ToList());
             }
             catch (Exception ex)
             {

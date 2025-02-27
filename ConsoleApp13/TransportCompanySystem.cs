@@ -13,14 +13,18 @@ namespace ConsoleApp13
         private Way _wayObj;
         private Car _carObj;
         private string _email;
+        private List<Way> _allWays;
+
         private readonly TransportType _transportType;
         private readonly DateToReceve _receveDate;
 
-        public TransportCompanySystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email)
+
+        public TransportCompanySystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email, List<Way> ways)
         {
             _transportType = transportType;
             _receveDate = receveDate;
             _email = email;
+            _allWays = ways;
             AddWay(cityFrom, cityTo);
             AddCar(car);
         }
@@ -65,8 +69,7 @@ namespace ConsoleApp13
                 throw new Exception("Cities are same");
             }
 
-            List<Way> ways = Repositories.s_WaysRepo.GetAll().ToList();
-            Way way = ways.FirstOrDefault(c => c.CityFrom == cityFrom && c.CityTo == cityTo);
+            Way way = _allWays.FirstOrDefault(c => c.CityFrom == cityFrom && c.CityTo == cityTo);
 
             if (way == null)
             {
@@ -120,6 +123,6 @@ namespace ConsoleApp13
     {
         Week,
         Month,
-        Months2   
+        Months2
     }
 }
