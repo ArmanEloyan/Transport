@@ -8,7 +8,6 @@ namespace ConsoleApp13.CityFldr
 {
     internal class Way
     {
-        //  private double _distantion;
         private static int s_allCityFromToCount;
 
         private double _startPrice;
@@ -16,20 +15,6 @@ namespace ConsoleApp13.CityFldr
         public int Id { get; set; }
         public City CityFrom { get; set; }
         public City CityTo { get; set; }
-     //   public TransportType TransportType { get; set; }
-
-        //public double Distantion
-        //{
-        //    get { return _distantion; }
-        //    set
-        //    {
-        //        if(value<0)
-        //        {
-        //            throw new Exception("Distantion cant be less then 0");
-        //        }
-        //        _distantion = value;
-        //    }
-        //}
 
         public double StartPrice
         {
@@ -44,14 +29,12 @@ namespace ConsoleApp13.CityFldr
             }
         }
 
-        public Way(City cityFrom, City cityTo, double startPrice = 10000)//, TransportType transportType = TransportType.Open)
+        public Way(City cityFrom, City cityTo, double startPrice)
         {
             Id = ++s_allCityFromToCount;
             CityFrom = cityFrom;
             CityTo = cityTo;
-           // Distantion = distantion;
             StartPrice = startPrice;
-          //  TransportType = transportType;
         }
 
         public void DisplayInfo()

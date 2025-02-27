@@ -17,8 +17,6 @@ namespace ConsoleApp13
         public TransportType TransportType { get; set; }
         public DateToReceve ReceveDate { get; set; }
 
-        
-
         public TransportCompanySystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email)
         {
             TransportType = transportType;

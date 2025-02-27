@@ -11,6 +11,7 @@ namespace ConsoleApp13
         private CarType _type;
 
         public int Id { get; set; }
+
         public CarType Type
         {
             get { return _type; }
