@@ -13,8 +13,8 @@ namespace ConsoleApp13
         private Way _wayObj;
         private Car _carObj;
         private string _email;
-        private TransportType _transportType;
-        private DateToReceve _receveDate;
+        private readonly TransportType _transportType;
+        private readonly DateToReceve _receveDate;
 
         public TransportCompanySystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email)
         {

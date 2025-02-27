@@ -124,10 +124,6 @@ namespace ConsoleApp13.UI
                 {
                     return TransportType.Enclosed;
                 }
-                else
-                {
-                    continue;
-                }
             }
         }
 
@@ -147,10 +143,6 @@ namespace ConsoleApp13.UI
                 else if (type == 3)
                 {
                     return DateToReceve.Months2;
-                }
-                else
-                {
-                    continue;
                 }
             }
         }
