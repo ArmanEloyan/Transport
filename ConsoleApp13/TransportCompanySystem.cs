@@ -43,6 +43,7 @@ namespace ConsoleApp13
             {
                 price *= 1.3;
             }
+
             price *= _carObj.Coefficent;
             price *= CalculateDateToRecieveCoefficent();
             return price;

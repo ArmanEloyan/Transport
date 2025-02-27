@@ -62,7 +62,7 @@ namespace ConsoleApp13.UI
 
             TransportType transportType = GetTransportTypeUI();
             car = GetCarUI();
-            bool isOperable = IsOperableUI();
+            car.IsOperable = IsOperableUI();
 
             DateToReceve dateToReceve = GetReceveDateUI();
             string email = "Enter Email: ".TryConvertNullOrWhiteSpaceCheck(false);

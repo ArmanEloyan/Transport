@@ -11,6 +11,7 @@ namespace ConsoleApp13
         private CarType _type;
 
         public int Id { get; set; }
+        public bool IsOperable { get; set; }
 
         public CarType Type
         {
