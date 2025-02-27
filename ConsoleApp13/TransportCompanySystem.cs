@@ -13,14 +13,13 @@ namespace ConsoleApp13
         private Way _wayObj;
         private Car _carObj;
         private string _email;
-
-        public TransportType TransportType { get; set; }
-        public DateToReceve ReceveDate { get; set; }
+        private TransportType _transportType;
+        private DateToReceve _receveDate;
 
         public TransportCompanySystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email)
         {
-            TransportType = transportType;
-            ReceveDate = receveDate;
+            _transportType = transportType;
+            _receveDate = receveDate;
             _email = email;
             AddWay(cityFrom, cityTo);
             AddCar(car);
@@ -40,7 +39,7 @@ namespace ConsoleApp13
 
             double price = _wayObj.StartPrice;
 
-            if (TransportType == TransportType.Enclosed)
+            if (_transportType == TransportType.Enclosed)
             {
                 price *= 1.3;
             }
@@ -89,7 +88,7 @@ namespace ConsoleApp13
         private double CalculateDateToRecieveCoefficent()
         {
             double coefficent = 1.0;
-            switch (ReceveDate)
+            switch (_receveDate)
             {
                 case DateToReceve.Week:
                     coefficent = 1.1;
