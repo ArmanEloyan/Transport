@@ -177,10 +177,6 @@ namespace ConsoleApp13.UI
                 {
                     return false;
                 }
-                else
-                {
-                    continue;
-                }
             }
         }
 
