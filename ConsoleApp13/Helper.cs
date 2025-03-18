@@ -92,5 +92,10 @@ namespace ConsoleApp13
                 ErrorMessage("value cant be empty");
             }
         }
+
+        public static T ChangeType<T>(this object obj)
+        {
+            return (T)Convert.ChangeType(obj, typeof(T));
+        }
     }
 }

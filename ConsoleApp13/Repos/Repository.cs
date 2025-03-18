@@ -25,9 +25,10 @@ namespace ConsoleApp13.Repos
             _values.Remove(value);
         }
 
-        public T Get(Func<T, bool> func)
+        public T Get(int id)
         {
-            return _values.FirstOrDefault(func) ?? throw new Exception($"Cant find!");
+
+           throw new Exception($"Cant find!");
         }
 
         public IEnumerable<T> GetAll()
@@ -35,8 +36,10 @@ namespace ConsoleApp13.Repos
             return _values;
         }
 
-        public void Update(T oldEntity, T newEntity)
+        public void Update(int id, T newEntity)
         {
+            T oldEntity = Get(id);
+
             int index = _values.IndexOf(oldEntity);
 
             if (index == -1)

@@ -1,5 +1,4 @@
-﻿using ConsoleApp13.CityFldr;
-using ConsoleApp13.Repos;
+﻿using ConsoleApp13.Repos;
 using ConsoleApp13.UI;
 
 namespace ConsoleApp13
@@ -8,9 +7,9 @@ namespace ConsoleApp13
     {
         static void Main(string[] args)
         {
-            IRepository<City> citiesRepo = new Repository<City>();
-            IRepository<Car> carRepo = new Repository<Car>();
-            IRepository<Way> waysRepo = new Repository<Way>();
+            IRepository<City> citiesRepo = new RepositoryAdoNet<City>();
+            IRepository<Car> carRepo = new RepositoryAdoNet<Car>();
+            IRepository<Way> waysRepo = new RepositoryAdoNet<Way>();
 
             AdminPanel adminPanel = new AdminPanel(citiesRepo, carRepo,waysRepo);
             UserPanel userPanel = new UserPanel(citiesRepo, carRepo, waysRepo);

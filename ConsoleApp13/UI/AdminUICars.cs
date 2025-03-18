@@ -1,5 +1,4 @@
-﻿using ConsoleApp13.CityFldr;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,7 +73,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                car = _adminPanel.GetCar(c => c.Id == carId);
+                car = _adminPanel.GetCar(carId);
             }
             catch (Exception ex)
             {
@@ -92,7 +91,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                car = _adminPanel.GetCar(c => c.Id == id);
+                car = _adminPanel.GetCar(id);
             }
             catch (Exception ex)
             {
@@ -105,7 +104,7 @@ namespace ConsoleApp13.UI
 
         private void GetAllCars()
         {
-            List<Car> cars = _adminPanel.GetAllCars().ToList();
+            IEnumerable<Car> cars = _adminPanel.GetAllCars();
 
             foreach (var car in cars)
             {
@@ -122,7 +121,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                   car = _adminPanel.GetCar(c => c.Id == id);
+                    car = _adminPanel.GetCar(id);
                 }
                 catch (Exception ex)
                 {
@@ -137,17 +136,16 @@ namespace ConsoleApp13.UI
                 {
                     case 1:
                         car.Mark = "Enter new Mark: ".TryConvertNullOrWhiteSpaceCheck(false);
-                        return;
                         break;
+
                     case 2:
                         car.Model = "Enter new Model: ".TryConvertNullOrWhiteSpaceCheck(false);
-                        return;
                         break;
+
                     case 3:
                         try
                         {
                             car.Year = "Enter new Year: ".TryConvert<int>(false);
-                            return;
                         }
                         catch (Exception ex)
                         {
@@ -164,13 +162,13 @@ namespace ConsoleApp13.UI
                             {
                                 op = "Enter Type option: ".TryConvert<int>(true);
                                 op--;
-                                if(op >= 0 && op < 4)
+                                if (op >= 0 && op < 4)
                                 {
                                     break;
                                 }
                             }
                             car.Type = (CarType)op;
-                            return;
+                            break;
                         }
                         catch (Exception ex)
                         {
@@ -180,9 +178,17 @@ namespace ConsoleApp13.UI
                     case 0:
                         return;
                 }
+
+                try
+                {
+                    _adminPanel.Update(id, car);
+                }
+                catch (Exception ex)
+                {
+                    Helper.ErrorMessage(ex.Message);
+                }
+
             }
         }
-
-
     }
 }

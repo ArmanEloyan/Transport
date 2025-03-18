@@ -1,5 +1,4 @@
-﻿using ConsoleApp13.CityFldr;
-using ConsoleApp13.Repos;
+﻿using ConsoleApp13.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp13
 {
-    internal class TransportCompanySystem
+    internal class TransportCompanyOrderSystem
     {
         private Way _wayObj;
         private Car _carObj;
         private string _email;
-        private List<Way> _allWays;
+        private IEnumerable<Way> _allWays;
 
         private readonly TransportType _transportType;
         private readonly DateToReceve _receveDate;
 
 
-        public TransportCompanySystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email, List<Way> ways)
+        public TransportCompanyOrderSystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email, IEnumerable<Way> ways)
         {
             _transportType = transportType;
             _receveDate = receveDate;
@@ -69,7 +68,7 @@ namespace ConsoleApp13
                 throw new Exception("Cities are same");
             }
 
-            Way way = _allWays.FirstOrDefault(c => c.CityFrom == cityFrom && c.CityTo == cityTo);
+            Way way = _allWays.FirstOrDefault(c => c.CityFrom.Id == cityFrom.Id && c.CityTo.Id == cityTo.Id);
 
             if (way == null)
             {

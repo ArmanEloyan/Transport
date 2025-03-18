@@ -1,5 +1,4 @@
-﻿using ConsoleApp13.CityFldr;
-using ConsoleApp13.Repos;
+﻿using ConsoleApp13.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp13
 {
-    internal class UserPanel
+    internal class UserPanel 
     {
         private readonly IRepository<City> _citiesRepo;
         private readonly IRepository<Car> _carRepo;
@@ -21,9 +20,9 @@ namespace ConsoleApp13
             _waysRepo = waysRepo;
         }
 
-        public City GetCity(Func<City, bool> func)
+        public City GetCity(int id)
         {
-            return _citiesRepo.Get(func);
+            return _citiesRepo.Get(id);
         }
 
         public IEnumerable<City> GetAllCities()
@@ -31,9 +30,9 @@ namespace ConsoleApp13
             return _citiesRepo.GetAll();
         }
 
-        public Car GetCar(Func<Car, bool> func)
+        public Car GetCar(int id)
         {
-            return _carRepo.Get(func);
+            return _carRepo.Get(id);
         }
 
         public IEnumerable<Car> GetAllCars()
@@ -41,9 +40,9 @@ namespace ConsoleApp13
             return _carRepo.GetAll();
         }
 
-        public Way GetWay(Func<Way, bool> func)
+        public Way GetWay(int id)
         {
-            return _waysRepo.Get(func);
+            return _waysRepo.Get(id);
         }
 
         public IEnumerable<Way> GetAllWays()
@@ -53,7 +52,7 @@ namespace ConsoleApp13
 
         public bool CheckHasWay(City cityFrom, City cityTo, out Way way)
         {
-            way = _waysRepo.Get(c => c.CityFrom == cityFrom && c.CityTo == cityTo);
+            way = _waysRepo.GetAll().FirstOrDefault(c => c.CityFrom.Id == cityFrom.Id && c.CityTo.Id == cityTo.Id);
 
             if(way == null)
             {

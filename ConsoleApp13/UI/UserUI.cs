@@ -1,5 +1,4 @@
-﻿using ConsoleApp13.CityFldr;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
@@ -67,10 +66,10 @@ namespace ConsoleApp13.UI
             DateToReceve dateToReceve = GetReceveDateUI();
             string email = "Enter Email: ".TryConvertNullOrWhiteSpaceCheck(false);
 
-            TransportCompanySystem transportCompany = null;
+            TransportCompanyOrderSystem transportCompany = null;
             try
             {
-                transportCompany = new TransportCompanySystem(cityFrom, cityTo, car, transportType, dateToReceve, email, _userPanel.GetAllWays().ToList());
+                transportCompany = new TransportCompanyOrderSystem(cityFrom, cityTo, car, transportType, dateToReceve, email, _userPanel.GetAllWays());
             }
             catch (Exception ex)
             {
@@ -102,7 +101,7 @@ namespace ConsoleApp13.UI
                 int id = "Enter City Id: ".TryConvert<int>(false);
                 try
                 {
-                    return _userPanel.GetCity(c => c.Id == id);
+                    return _userPanel.GetCity(id);
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +154,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    return _userPanel.GetCar(c => c.Id == carId);
+                    return _userPanel.GetCar(carId);
                 }
                 catch (Exception ex)
                 {
@@ -182,7 +181,7 @@ namespace ConsoleApp13.UI
 
         private void GetCars()
         {
-            List<Car> cars = _userPanel.GetAllCars().ToList();
+            IEnumerable<Car> cars = _userPanel.GetAllCars();
 
             foreach (var car in cars)
             {
@@ -192,7 +191,7 @@ namespace ConsoleApp13.UI
 
         private void GetCities()
         {
-            List<City> cities = _userPanel.GetAllCities().ToList();
+            IEnumerable<City> cities = _userPanel.GetAllCities();
 
             foreach (var city in cities)
             {

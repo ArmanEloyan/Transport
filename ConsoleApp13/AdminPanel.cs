@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApp13.CityFldr;
 using ConsoleApp13.Repos;
 
 namespace ConsoleApp13
@@ -20,7 +19,7 @@ namespace ConsoleApp13
             _carRepo = carRepo;
             _waysRepo = waysRepo;
 
-            Initilize();
+         //   Initilize();
         }
 
         public void Add(City city)
@@ -58,24 +57,24 @@ namespace ConsoleApp13
            _carRepo.Delete(car);
         }
 
-        public void Update(City oldCity, City newCity)
+        public void Update(int id, City newCity)
         {
-            _citiesRepo.Update(oldCity, newCity);
+            _citiesRepo.Update(id, newCity);
         }
 
-        public void Update(Car oldCar, Car newCar)
+        public void Update(int id, Car newCar)
         {
-           _carRepo.Update(oldCar, newCar);
+           _carRepo.Update(id, newCar);
         }
 
-        public City GetCity(Func<City, bool> func)
+        public City GetCity(int id)
         {
-            return _citiesRepo.Get(func);
+            return _citiesRepo.Get(id);
         }
 
-        public Car GetCar(Func<Car, bool> func)
+        public Car GetCar(int id)
         {
-            return _carRepo.Get(func);
+            return _carRepo.Get(id);
         }
 
         public IEnumerable<City> GetAlCities()
@@ -90,8 +89,8 @@ namespace ConsoleApp13
 
         private bool ContainsCity(City city)
         {
-            List<City> cityes = _citiesRepo.GetAll().ToList();
-            if (cityes.Contains(city))
+            IEnumerable<City> cityes = _citiesRepo.GetAll();
+            if (cityes.Any(n => n.Id == city.Id))
             {
                 return true;
             }
@@ -114,9 +113,9 @@ namespace ConsoleApp13
             _waysRepo.Delete(cityFromTo);
         }
 
-        public Way GetWay(Func<Way, bool> func)
+        public Way GetWay(int id)
         {
-           return _waysRepo.Get(func);
+           return _waysRepo.Get(id);
         }
 
         public IEnumerable<Way> GetAllWays()
@@ -124,34 +123,34 @@ namespace ConsoleApp13
             return _waysRepo.GetAll();
         }
 
-        public void UpdateWay(Way oldCityFromTo, Way newCityFromTo)
+        public void Update(int id, Way newCityFromTo)
         {
-            _waysRepo.Update(oldCityFromTo, newCityFromTo);
+            _waysRepo.Update(id, newCityFromTo);
         }
 
-        private void Initilize()
-        {
-            City city1 = new City("Yerevan");
-            City city2 = new City("Gyumri");
-            City city3 = new City("Aparan");
+        //private void Initilize()
+        //{
+        //    City city1 = new City("Yerevan");
+        //    City city2 = new City("Gyumri");
+        //    City city3 = new City("Aparan");
 
-            List<City> cities = new List<City>() { city1, city2, city3 };
-            AddRange(cities);
+        //    List<City> cities = new List<City>() { city1, city2, city3 };
+        //    AddRange(cities);
 
-            List<Car> cars = new List<Car>() { new Car("BMW", "X5", 2015, CarType.Sedan), new Car("Yamaha", "Y300", 2004, CarType.Moto), new Car("Toyota", "Camry", 2019, CarType.Sedan), new Car("GMC", "Canyon", 2018, CarType.Truck) };
-            AddRange(cars);
+        //    List<Car> cars = new List<Car>() { new Car("BMW", "X5", 2015, CarType.Sedan), new Car("Yamaha", "Y300", 2004, CarType.Moto), new Car("Toyota", "Camry", 2019, CarType.Sedan), new Car("GMC", "Canyon", 2018, CarType.Truck) };
+        //    AddRange(cars);
 
-            Way way1 = new Way(city1, city2, 5000);
-            Way way2 = new Way(city1, city3, 8000);
+        //    Way way1 = new Way(city1, city2, 5000);
+        //    Way way2 = new Way(city1, city3, 8000);
 
-            Way way3 = new Way(city2, city1, 6000);
-            Way way4 = new Way(city2, city3, 10000);
+        //    Way way3 = new Way(city2, city1, 6000);
+        //    Way way4 = new Way(city2, city3, 10000);
 
-            Way way5 = new Way(city3, city1, 7000);
-            Way way6 = new Way(city3, city2, 11000);
+        //    Way way5 = new Way(city3, city1, 7000);
+        //    Way way6 = new Way(city3, city2, 11000);
 
-            List<Way> ways = new List<Way>() { way1, way2, way3, way4, way5, way6 };
-            AddRange(ways);
-        }
+        //    List<Way> ways = new List<Way>() { way1, way2, way3, way4, way5, way6 };
+        //    AddRange(ways);
+        //}
     }
 }

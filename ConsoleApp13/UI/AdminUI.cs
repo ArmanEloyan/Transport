@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApp13.CityFldr;
 
 namespace ConsoleApp13.UI
 {
@@ -89,7 +88,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = _adminPanel.GetCity(c => c.Id == cityId);
+                city = _adminPanel.GetCity(cityId);
             }
             catch (Exception ex)
             {
@@ -107,7 +106,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = _adminPanel.GetCity(c => c.Id == id);
+                city = _adminPanel.GetCity(id);
             }
             catch (Exception ex)
             {
@@ -120,11 +119,18 @@ namespace ConsoleApp13.UI
 
         private void GetAllCities()
         {
-            List<City> cities = _adminPanel.GetAlCities().ToList();
-
-            foreach (var city in cities)
+            try
             {
-                city.DisplayInfo();
+                IEnumerable<City> cities = _adminPanel.GetAlCities();
+
+                foreach (var city in cities)
+                {
+                    city.DisplayInfo();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
@@ -135,7 +141,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                oldCity = _adminPanel.GetCity(c => c.Id == id);
+                oldCity = _adminPanel.GetCity(id);
             }
             catch (Exception ex)
             {
@@ -146,6 +152,16 @@ namespace ConsoleApp13.UI
             string cityNewName = "Enter new name: ".TryConvertNullOrWhiteSpaceCheck(false);
 
             oldCity.Name = cityNewName;
+
+            try
+            {
+                _adminPanel.Update(id, oldCity);
+            }
+            catch (Exception ex)
+            {
+                Helper.ErrorMessage(ex.Message);
+            }
+
         }
 
     }

@@ -84,6 +84,11 @@ namespace ConsoleApp13
             Type = carTypee;
         }
 
+        public Car()
+        {
+            
+        }
+
         private double GetCoefficent()
         {
             if (Type == CarType.Sedan)

@@ -4,38 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp13.CityFldr
+
+public class City
 {
-    public class City
+    private string _name;
+    private static int s_allCount;
+
+    public int Id { get; set; }
+
+    public string Name
     {
-        private string _name;
-        private static int s_allCount;
-
-        public int Id { get; set; }
-
-        public string Name
+        get { return _name; }
+        set
         {
-            get { return _name; }
-            set
+            if (string.IsNullOrWhiteSpace(value))
             {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new Exception("Name cant be empty");
-                }
-                _name = value;
+                throw new Exception("Name cant be empty");
             }
-        }
-
-
-        public City(string name)
-        {
-            Id = ++s_allCount;
-            Name = name;
-        }
-
-        public void DisplayInfo()
-        {
-            Console.WriteLine($"Id: {Id} | Name: {Name}");
+            _name = value;
         }
     }
+
+
+    public City(string name)
+    {
+        Id = ++s_allCount;
+        Name = name;
+    }
+
+    public City()
+    {
+            
+    }
+
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Id: {Id} | Name: {Name}");
+    }
 }
+
