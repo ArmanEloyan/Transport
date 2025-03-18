@@ -76,18 +76,15 @@ namespace ConsoleApp13.Repos
                     {
                         City city = Helper.ChangeType<City>(value);
                         command.Connection = connection;
-                        command.CommandText = $"DELETE FROM {wayDataName} WHERE CityFromId = @Id OR CityToId = @Id";
+                        command.CommandText = $"DELETE FROM {wayDataName} WHERE CityFromId = @Id OR CityToId = @Id DELETE FROM {cityDataName} WHERE Id = @Id";
                         command.Parameters.Add(new SqlParameter("@Id", city.Id));
-                        command.ExecuteNonQuery();
-
-                        command.CommandText = $"DELETE FROM {cityDataName} WHERE Id = @Id";
                         command.ExecuteNonQuery();
                     }
                     else if (value is Way)
                     {
                         Way way = Helper.ChangeType<Way>(value);
                         command.Connection = connection;
-                        command.CommandText = $"DELETE * FROM {wayDataName} WHERE Id = @Id";
+                        command.CommandText = $"DELETE FROM {wayDataName} WHERE Id = @Id";
                         command.Parameters.Add(new SqlParameter("@Id", way.Id));
                         command.ExecuteNonQuery();
                     }
@@ -95,7 +92,7 @@ namespace ConsoleApp13.Repos
                     {
                         Car car = Helper.ChangeType<Car>(value);
                         command.Connection = connection;
-                        command.CommandText = $"DELETE * FROM {carDataName} WHERE Id = @Id";
+                        command.CommandText = $"DELETE FROM {carDataName} WHERE Id = @Id";
                         command.Parameters.Add(new SqlParameter("@Id", car.Id));
                         command.ExecuteNonQuery();
                     }
