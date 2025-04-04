@@ -12,13 +12,6 @@ namespace ConsoleApp13
     {
         public event Action<Order> OrderCompleted;
 
-        private Way _wayObj;
-        private Car _carObj;
-        private string _email;
-
-        private readonly TransportType _transportType;
-        private readonly DateToReceve _receveDate;
-
         IRepository<Order> _ordersRepository;
 
         public TransportCompanyOrderSystem(IRepository<Order> ordersRepository)
@@ -80,6 +73,7 @@ namespace ConsoleApp13
         private double CalculateDateToRecieveCoefficent(DateToReceve recieveDate)
         {
             double coefficent = 1.0;
+
             switch (recieveDate)
             {
                 case DateToReceve.Week:
