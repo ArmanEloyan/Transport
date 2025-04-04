@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleApp13.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,7 +74,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                car = _adminPanel.GetCar(carId);
+                car = _adminPanel.GetCar(c => c.Id == carId);
             }
             catch (Exception ex)
             {
@@ -91,7 +92,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                car = _adminPanel.GetCar(id);
+                car = _adminPanel.GetCar(c=>c.Id == id);
             }
             catch (Exception ex)
             {
@@ -121,7 +122,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    car = _adminPanel.GetCar(id);
+                    car = _adminPanel.GetCar(c => c.Id == id);
                 }
                 catch (Exception ex)
                 {
@@ -181,7 +182,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    _adminPanel.Update(id, car);
+                    _adminPanel.Update(car);
                 }
                 catch (Exception ex)
                 {

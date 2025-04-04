@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp13.Repos
 {
-    internal interface IRepository<T>
+    internal interface IRepository<TEntity>
     {
-        void Add(T value);
-        void AddRange(IEnumerable<T> values);
-        void Update(int id, T newEntity);
-        void Delete(T value);
-        T Get(int id);
-        IEnumerable<T> GetAll();
+        void Add(TEntity value);
+        void AddRange(IEnumerable<TEntity> values);
+        void Update(TEntity newEntity);
+        void Delete(TEntity value);
+        TEntity Get(Func<TEntity,bool> predicate);
+        IEnumerable<TEntity> GetAll();
     }
 }

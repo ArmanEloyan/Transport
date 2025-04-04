@@ -1,4 +1,5 @@
-﻿using ConsoleApp13.Repos;
+﻿using ConsoleApp13.Models;
+using ConsoleApp13.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,106 +10,104 @@ namespace ConsoleApp13
 {
     internal class TransportCompanyOrderSystem
     {
+        public event Action<Order> OrderCompleted;
+
         private Way _wayObj;
         private Car _carObj;
         private string _email;
-        private IEnumerable<Way> _allWays;
 
         private readonly TransportType _transportType;
         private readonly DateToReceve _receveDate;
 
+        IRepository<Order> _ordersRepository;
 
-        public TransportCompanyOrderSystem(City cityFrom, City cityTo, Car car, TransportType transportType, DateToReceve receveDate, string email, IEnumerable<Way> ways)
+        public TransportCompanyOrderSystem(IRepository<Order> ordersRepository)
         {
-            _transportType = transportType;
-            _receveDate = receveDate;
-            _email = email;
-            _allWays = ways;
-            AddWay(cityFrom, cityTo);
-            AddCar(car);
+            OrderCompleted = AddOrder;
+            OrderCompleted += SendMail;
+
+            _ordersRepository = ordersRepository;
         }
 
-        public double CalculatePrice()
+        public Order CreateOrder(Way way, Car car, string email, TransportType transportType, DateToReceve receveDate)
         {
-            if (_wayObj == null)
-            {
-                throw new Exception("Way cant be null");
-            }
+            double price = CalculatePrice(way, car, transportType, receveDate);
+            DateTime receveDateTime = ReceveDateToDateTime(receveDate);
 
-            if (_carObj == null)
-            {
-                throw new Exception("Car cant be null");
-            }
+            Order order = new Order(email, way, car, transportType, receveDateTime, price);
+            return order;
+        }
 
-            double price = _wayObj.StartPrice;
+        public double CalculatePrice(Way way, Car car, TransportType transportType, DateToReceve recieveDate)
+        {
+            double price = way.StartPrice;
 
-            if (_transportType == TransportType.Enclosed)
+            if (transportType == TransportType.Enclosed)
             {
                 price *= 1.3;
             }
 
-            price *= _carObj.Coefficent;
-            price *= CalculateDateToRecieveCoefficent();
+            price *= car.Coefficent;
+            price *= CalculateDateToRecieveCoefficent(recieveDate);
             return price;
         }
 
-        public void CompleteOrder()
+        private DateTime ReceveDateToDateTime(DateToReceve receveDate)
         {
-            SendMail(_email);
+            DateTime date = new DateTime();
+
+            if (receveDate == DateToReceve.Week)
+            {
+                date = DateTime.Now.AddDays(7);
+            }
+            else if (receveDate == DateToReceve.Month)
+            {
+                date = DateTime.Now.AddMonths(1);
+            }
+            else if (receveDate == DateToReceve.Months2)
+            {
+                date = DateTime.Now.AddMonths(2);
+            }
+
+            return date;
         }
 
-        public void AddWay(City cityFrom, City cityTo)
+        public void CompleteOrder(Order order)
         {
-            if (cityFrom == null || cityTo == null)
-            {
-                throw new Exception("City cant be null");
-            }
-            if (cityFrom.Name == cityTo.Name)
-            {
-                throw new Exception("Cities are same");
-            }
-
-            Way way = _allWays.FirstOrDefault(c => c.CityFrom.Id == cityFrom.Id && c.CityTo.Id == cityTo.Id);
-
-            if (way == null)
-            {
-                throw new Exception("Cant find this Way");
-            }
-
-            _wayObj = way;
+            OrderCompleted.Invoke(order);
         }
 
-        public void AddCar(Car car)
-        {
-            if (car == null)
-            {
-                throw new Exception("Car cant be null");
-            }
-
-            _carObj = car;
-        }
-
-        private double CalculateDateToRecieveCoefficent()
+        private double CalculateDateToRecieveCoefficent(DateToReceve recieveDate)
         {
             double coefficent = 1.0;
-            switch (_receveDate)
+            switch (recieveDate)
             {
                 case DateToReceve.Week:
-                    coefficent = 1.1;
+                    coefficent = 1.3;
                     break;
                 case DateToReceve.Month:
                     coefficent = 1.2;
                     break;
                 case DateToReceve.Months2:
-                    coefficent = 1.3;
+                    coefficent = 1.1;
                     break;
             }
             return coefficent;
         }
 
-        public void SendMail(string mail)
+        private void AddOrder(Order order)
         {
-            Console.WriteLine($"Confirmation mail sent to {mail}");
+            if (order == null)
+            {
+                throw new Exception("Order cant be null");
+            }
+
+            _ordersRepository.Add(order);
+        }
+
+        public void SendMail(Order order)
+        {
+            Console.WriteLine($"Confirmation mail sent to {order.Email}");
         }
     }
 

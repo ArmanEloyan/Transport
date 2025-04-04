@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 public class City
 {
     private string _name;
-    private static int s_allCount;
 
     public int Id { get; set; }
+    public List<Way> WaysFrom { get; set; }
+    public List<Way> WaysTo { get; set; }
+
 
     public string Name
     {
@@ -28,13 +30,7 @@ public class City
 
     public City(string name)
     {
-        Id = ++s_allCount;
         Name = name;
-    }
-
-    public City()
-    {
-            
     }
 
     public void DisplayInfo()

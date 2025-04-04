@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleApp13.Models;
 using ConsoleApp13.Repos;
 
 namespace ConsoleApp13
@@ -12,14 +13,14 @@ namespace ConsoleApp13
         private IRepository<City> _citiesRepo;
         private IRepository<Car> _carRepo;
         private IRepository<Way> _waysRepo;
+        private IRepository<Order> _orderRepo;
 
-        public AdminPanel(IRepository<City> citiesRepo, IRepository<Car> carRepo, IRepository<Way> waysRepo)
+        public AdminPanel(IRepository<City> citiesRepo, IRepository<Car> carRepo, IRepository<Way> waysRepo, IRepository<Order> orderRepo)
         {
             _citiesRepo = citiesRepo;
             _carRepo = carRepo;
             _waysRepo = waysRepo;
-
-         //   Initilize();
+            _orderRepo = orderRepo;
         }
 
         public void Add(City city)
@@ -49,6 +50,16 @@ namespace ConsoleApp13
 
         public void Delete(City city)
         {
+            foreach (var wayFrom in city.WaysFrom)
+            {
+                _waysRepo.Delete(wayFrom);
+            }
+
+            foreach (var wayTo in city.WaysTo)
+            {
+                _waysRepo.Delete(wayTo);
+            }
+
             _citiesRepo.Delete(city);
         }
 
@@ -57,27 +68,27 @@ namespace ConsoleApp13
            _carRepo.Delete(car);
         }
 
-        public void Update(int id, City newCity)
+        public void Update(City newCity)
         {
-            _citiesRepo.Update(id, newCity);
+            _citiesRepo.Update(newCity);
         }
 
-        public void Update(int id, Car newCar)
+        public void Update(Car newCar)
         {
-           _carRepo.Update(id, newCar);
+           _carRepo.Update(newCar);
         }
 
-        public City GetCity(int id)
+        public City GetCity(Func<City, bool> predicate)
         {
-            return _citiesRepo.Get(id);
+            return _citiesRepo.Get(predicate);
         }
 
-        public Car GetCar(int id)
+        public Car GetCar(Func<Car, bool> predicate)
         {
-            return _carRepo.Get(id);
+            return _carRepo.Get(predicate);
         }
 
-        public IEnumerable<City> GetAlCities()
+        public IEnumerable<City> GetAllCities()
         {
             return _citiesRepo.GetAll();
         }
@@ -85,6 +96,11 @@ namespace ConsoleApp13
         public IEnumerable<Car> GetAllCars()
         {
             return _carRepo.GetAll();
+        }
+
+        public IEnumerable<Order> GetAllOrders()
+        {
+            return _orderRepo.GetAll();
         }
 
         private bool ContainsCity(City city)
@@ -97,15 +113,15 @@ namespace ConsoleApp13
             return false;
         }
 
-        public void AddWay(Way cityFromTo)
+        public void AddWay(Way way)
         {
-            if (ContainsCity(cityFromTo.CityFrom) && ContainsCity(cityFromTo.CityTo))
+            if (ContainsCity(way.CityFrom) && ContainsCity(way.CityTo))
             {
-                _waysRepo.Add(cityFromTo);
+                _waysRepo.Add(way);
                 return;
             }
 
-            throw new Exception("Cant add way. Cityes dont find");
+            throw new Exception("Cant add way. Cities does not find");
         }
 
         public void DeleteWay(Way cityFromTo)
@@ -113,9 +129,9 @@ namespace ConsoleApp13
             _waysRepo.Delete(cityFromTo);
         }
 
-        public Way GetWay(int id)
+        public Way GetWay(Func<Way, bool> predicate)
         {
-           return _waysRepo.Get(id);
+           return _waysRepo.Get(predicate);
         }
 
         public IEnumerable<Way> GetAllWays()
@@ -123,34 +139,9 @@ namespace ConsoleApp13
             return _waysRepo.GetAll();
         }
 
-        public void Update(int id, Way newCityFromTo)
+        public void Update(Way newCityFromTo)
         {
-            _waysRepo.Update(id, newCityFromTo);
+            _waysRepo.Update(newCityFromTo);
         }
-
-        //private void Initilize()
-        //{
-        //    City city1 = new City("Yerevan");
-        //    City city2 = new City("Gyumri");
-        //    City city3 = new City("Aparan");
-
-        //    List<City> cities = new List<City>() { city1, city2, city3 };
-        //    AddRange(cities);
-
-        //    List<Car> cars = new List<Car>() { new Car("BMW", "X5", 2015, CarType.Sedan), new Car("Yamaha", "Y300", 2004, CarType.Moto), new Car("Toyota", "Camry", 2019, CarType.Sedan), new Car("GMC", "Canyon", 2018, CarType.Truck) };
-        //    AddRange(cars);
-
-        //    Way way1 = new Way(city1, city2, 5000);
-        //    Way way2 = new Way(city1, city3, 8000);
-
-        //    Way way3 = new Way(city2, city1, 6000);
-        //    Way way4 = new Way(city2, city3, 10000);
-
-        //    Way way5 = new Way(city3, city1, 7000);
-        //    Way way6 = new Way(city3, city2, 11000);
-
-        //    List<Way> ways = new List<Way>() { way1, way2, way3, way4, way5, way6 };
-        //    AddRange(ways);
-        //}
     }
 }

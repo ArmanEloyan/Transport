@@ -1,52 +1,85 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleApp13.Models;
 
 namespace ConsoleApp13.Repos
 {
-    internal class Repository<T> : IRepository<T>
+    internal class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private List<T> _values = new List<T>();
+        private readonly DataContext _dataContext;
 
-        public void Add(T value)
+        public Repository(DataContext dataContext)
         {
-            _values.Add(value);
+            _dataContext = dataContext;
         }
 
-        public void AddRange(IEnumerable<T> values)
+        public void Add(TEntity value)
         {
-            _values.AddRange(values);
+            if (value == null)
+                throw new ArgumentNullException("Value cant be null");
+
+            _dataContext.Set<TEntity>().Add(value);
+            _dataContext.SaveChanges();
         }
 
-        public void Delete(T value)
+        public void AddRange(IEnumerable<TEntity> values)
         {
-            _values.Remove(value);
+            if (values == null)
+                throw new ArgumentNullException("Values cant be null");
+
+            _dataContext.Set<TEntity>().AddRange(values);
+            _dataContext.SaveChanges();
         }
 
-        public T Get(int id)
+        public void Delete(TEntity value)
         {
-
-           throw new Exception($"Cant find!");
+            _dataContext.Set<TEntity>().Remove(value);
+            _dataContext.SaveChanges();
         }
 
-        public IEnumerable<T> GetAll()
+        public TEntity Get(Func<TEntity, bool> predicate)
         {
-            return _values;
+            TEntity entity = _dataContext.Set<TEntity>().FirstOrDefault(predicate);
+
+            if (entity == null)
+                throw new Exception("Cant find");
+
+            return entity;
         }
 
-        public void Update(int id, T newEntity)
+        public IEnumerable<TEntity> GetAll()
         {
-            T oldEntity = Get(id);
+            return ApplyIncludes(_dataContext.Set<TEntity>()).AsEnumerable();
+        }
 
-            int index = _values.IndexOf(oldEntity);
+        public void Update(TEntity newEntity)
+        {
+            _dataContext.Set<TEntity>().Update(newEntity);
+        }
 
-            if (index == -1)
+        private IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> query)
+        {
+            if (typeof(TEntity) == typeof(Way))
             {
-                throw new Exception("Cant find!");
+                return query
+                    .Include(e => ((Way)(object)e).CityFrom)
+                    .Include(e => ((Way)(object)e).CityTo);
             }
-            _values[index] = newEntity;
+            else if (typeof(TEntity) == typeof(Order))
+            {
+                return query
+                    .Include(e => ((Order)(object)e).WayObj)
+                        .ThenInclude(w => w.CityFrom)
+                    .Include(e => ((Order)(object)e).WayObj)
+                        .ThenInclude(w => w.CityTo)
+                    .Include(e => ((Order)(object)e).CarObj);
+            }
+
+            return query;
         }
     }
 }

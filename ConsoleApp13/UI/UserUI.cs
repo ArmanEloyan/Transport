@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleApp13.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
@@ -9,11 +10,13 @@ namespace ConsoleApp13.UI
 {
     internal class UserUI
     {
-        public UserPanel _userPanel;
+        private UserPanel _userPanel;
+        private TransportCompanyOrderSystem _transportCompanyOrderSystem;
 
-        public UserUI(UserPanel userPanel)
+        public UserUI(UserPanel userPanel, TransportCompanyOrderSystem transportCompanyOrderSystem)
         {
             _userPanel = userPanel;
+            _transportCompanyOrderSystem = transportCompanyOrderSystem;
         }
 
         public void UserPanelShow()
@@ -46,6 +49,8 @@ namespace ConsoleApp13.UI
             Car car = null;
             Way way = null;
 
+            //Order order = new Order();
+
             while (true)
             {
                 cityFrom = GetCityUI();
@@ -66,26 +71,16 @@ namespace ConsoleApp13.UI
             DateToReceve dateToReceve = GetReceveDateUI();
             string email = "Enter Email: ".TryConvertNullOrWhiteSpaceCheck(false);
 
-            TransportCompanyOrderSystem transportCompany = null;
-            try
-            {
-                transportCompany = new TransportCompanyOrderSystem(cityFrom, cityTo, car, transportType, dateToReceve, email, _userPanel.GetAllWays());
-            }
-            catch (Exception ex)
-            {
-                Helper.ErrorMessage(ex.Message);
-                return;
-            }
+          //  TransportCompanyOrderSystem transportCompany = null;
+            Order order =_transportCompanyOrderSystem.CreateOrder(way, car, email, transportType, dateToReceve);
 
-            double price = transportCompany.CalculatePrice();
-
-            Console.WriteLine($"Transport Cost: {price}");
+            Console.WriteLine($"Transport Cost: {order.Price}");
 
             int payOption = "1. Pay | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
 
             if (payOption == 1)
             {
-                transportCompany.CompleteOrder();
+                _transportCompanyOrderSystem.CompleteOrder(order);
             }
             else
             {
@@ -101,7 +96,7 @@ namespace ConsoleApp13.UI
                 int id = "Enter City Id: ".TryConvert<int>(false);
                 try
                 {
-                    return _userPanel.GetCity(id);
+                    return _userPanel.GetCity(c => c.Id == id);
                 }
                 catch (Exception ex)
                 {
@@ -154,7 +149,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    return _userPanel.GetCar(carId);
+                    return _userPanel.GetCar(c => c.Id == carId);
                 }
                 catch (Exception ex)
                 {

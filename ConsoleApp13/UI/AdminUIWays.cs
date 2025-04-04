@@ -45,7 +45,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityFromId = "Enter city from ID: ".TryConvert<int>(false);
-                cityFrom = _adminPanel.GetCity(cityFromId);
+                cityFrom = _adminPanel.GetCity(c=> c.Id == cityFromId);
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityToId = "Enter city to ID: ".TryConvert<int>(false);
-                cityTo = _adminPanel.GetCity(cityToId);
+                cityTo = _adminPanel.GetCity(c => c.Id == cityToId);
             }
             catch (Exception ex)
             {
@@ -86,7 +86,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                way = _adminPanel.GetWay(id);
+                way = _adminPanel.GetWay(w => w.Id == id);
             }
             catch (Exception ex)
             {
@@ -104,7 +104,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                way = _adminPanel.GetWay(id);
+                way = _adminPanel.GetWay(w => w.Id == id);
             }
             catch (Exception ex)
             {
@@ -113,6 +113,7 @@ namespace ConsoleApp13.UI
             }
 
             way.DisplayInfo();
+            
         }
 
         private void GetAllWays()
@@ -134,7 +135,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    oldWayObj = _adminPanel.GetWay(id);
+                    oldWayObj = _adminPanel.GetWay(w => w.Id == id);
                 }
                 catch (Exception ex)
                 {
@@ -151,7 +152,7 @@ namespace ConsoleApp13.UI
                         int idCityFrom = "Enter new City Id: ".TryConvert<int>(false);
                         try
                         {
-                            oldWayObj.CityFrom = _adminPanel.GetCity(idCityFrom);
+                            oldWayObj.CityFrom = _adminPanel.GetCity(c => c.Id == idCityFrom);
                         }
                         catch (Exception ex)
                         {
@@ -162,7 +163,7 @@ namespace ConsoleApp13.UI
                         int idCityTo = "Enter new City Id: ".TryConvert<int>(false);
                         try
                         {
-                            oldWayObj.CityTo = _adminPanel.GetCity(idCityTo);
+                            oldWayObj.CityTo = _adminPanel.GetCity(c => c.Id == idCityTo);
                         }
                         catch (Exception ex)
                         {
@@ -185,7 +186,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    _adminPanel.Update(id, oldWayObj);
+                    _adminPanel.Update(oldWayObj);
                 }
                 catch (Exception ex)
                 {

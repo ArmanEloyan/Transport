@@ -1,9 +1,7 @@
-﻿
-namespace ConsoleApp13
+﻿namespace ConsoleApp13.Models
 {
     public class Car
     {
-        private static int s_allCarsCount;
         private string _mark;
         private string _model;
         private int _year;
@@ -77,7 +75,6 @@ namespace ConsoleApp13
 
         public Car(string mark, string model, int year, CarType carTypee)
         {
-            Id = ++s_allCarsCount;
             Mark = mark;
             Model = model;
             Year = year;
@@ -86,7 +83,7 @@ namespace ConsoleApp13
 
         public Car()
         {
-            
+
         }
 
         private double GetCoefficent()

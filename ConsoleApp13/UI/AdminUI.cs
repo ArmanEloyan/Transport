@@ -19,7 +19,7 @@ namespace ConsoleApp13.UI
         {
             while (true)
             {
-                int option = "1. Cities | 2. Cars | 3. Ways | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+                int option = "1. Cities | 2. Cars | 3. Ways  | 4. Orders | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
 
                 switch (option)
                 {
@@ -32,9 +32,20 @@ namespace ConsoleApp13.UI
                     case 3:
                         ShowWaysPanel();
                         break;
+                    case 4:
+                        ShowOrders();
+                        break;
                     case 0:
                         return;
                 }
+            }
+        }
+
+        private void ShowOrders()
+        {
+            foreach (var order in _adminPanel.GetAllOrders())
+            {
+                Console.WriteLine(order.DisplayInfo()+"\n");
             }
         }
 
@@ -88,7 +99,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = _adminPanel.GetCity(cityId);
+                city = _adminPanel.GetCity(c => c.Id == cityId);
             }
             catch (Exception ex)
             {
@@ -106,7 +117,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = _adminPanel.GetCity(id);
+                city = _adminPanel.GetCity(c=>c.Id == id);
             }
             catch (Exception ex)
             {
@@ -121,7 +132,7 @@ namespace ConsoleApp13.UI
         {
             try
             {
-                IEnumerable<City> cities = _adminPanel.GetAlCities();
+                IEnumerable<City> cities = _adminPanel.GetAllCities();
 
                 foreach (var city in cities)
                 {
@@ -141,7 +152,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                oldCity = _adminPanel.GetCity(id);
+                oldCity = _adminPanel.GetCity(c => c.Id == id);
             }
             catch (Exception ex)
             {
@@ -155,7 +166,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                _adminPanel.Update(id, oldCity);
+                _adminPanel.Update(oldCity);
             }
             catch (Exception ex)
             {

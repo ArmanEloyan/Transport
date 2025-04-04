@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 
-internal class Way
+public class Way
 {
-    private static int s_allCityFromToCount;
-
     private double _startPrice;
 
     public int Id { get; set; }
-    public City CityFrom { get; set; }
-    public City CityTo { get; set; }
+    public int CityFromId { get; set; }
+    public int CityToId { get; set; }
+
+    public City CityFrom { get; internal set; }
+    public City CityTo { get; internal set; }
 
     public double StartPrice
     {
@@ -30,7 +32,6 @@ internal class Way
 
     public Way(City cityFrom, City cityTo, double startPrice)
     {
-        Id = ++s_allCityFromToCount;
         CityFrom = cityFrom;
         CityTo = cityTo;
         StartPrice = startPrice;
