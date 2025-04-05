@@ -93,9 +93,9 @@ namespace ConsoleApp13
             }
         }
 
-        public static T ChangeType<T>(this object obj)
-        {
-            return (T)Convert.ChangeType(obj, typeof(T));
-        }
+        //public static T ChangeType<T>(this object obj)
+        //{
+        //    return (T)Convert.ChangeType(obj, typeof(T));
+        //}
     }
 }

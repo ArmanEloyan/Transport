@@ -44,7 +44,7 @@ public class Way
 
     public string DisplayInfo()
     {
-         return $"Id: {Id} | CityFrom: {CityFrom.Name} | CityTo: {CityTo.Name} | StartPrice: {StartPrice}")
+         return $"Id: {Id} | CityFrom: {CityFrom.Name} | CityTo: {CityTo.Name} | StartPrice: {StartPrice}";
     }
 
 }
