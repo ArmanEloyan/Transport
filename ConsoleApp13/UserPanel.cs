@@ -23,40 +23,19 @@ namespace ConsoleApp13
             _orderRepo = ordeRepo;
         }
 
-        public City GetCity(Func<City, bool> predicate)
-        {
-            return _citiesRepo.Get(predicate);
-        }
+        public City GetCity(Func<City, bool> predicate) => _citiesRepo.Get(predicate);
 
-        public IEnumerable<City> GetAllCities()
-        {
-            return _citiesRepo.GetAll();
-        }
+        public IEnumerable<City> GetAllCities() => _citiesRepo.GetAll();
 
-        public Car GetCar(Func<Car, bool> predicate)
-        {
-            return _carRepo.Get(predicate);
-        }
+        public Car GetCar(Func<Car, bool> predicate) => _carRepo.Get(predicate);
 
-        public IEnumerable<Car> GetAllCars()
-        {
-            return _carRepo.GetAll();
-        }
+        public IEnumerable<Car> GetAllCars() => _carRepo.GetAll();
 
-        public Way GetWay(Func<Way, bool> predicate)
-        {
-            return _waysRepo.Get(predicate);
-        }
+        public Way GetWay(Func<Way, bool> predicate) => _waysRepo.Get(predicate);
 
-        public IEnumerable<Way> GetAllWays()
-        {
-            return _waysRepo.GetAll();
-        }
+        public IEnumerable<Way> GetAllWays() => _waysRepo.GetAll();
 
-        public void AddOrder(Order order)
-        {
-            _orderRepo.Add(order);
-        }
+        public void AddOrder(Order order) => _orderRepo.Add(order);
 
         public bool CheckHasWay(City cityFrom, City cityTo, out Way way)
         {

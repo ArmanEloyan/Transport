@@ -100,16 +100,14 @@ namespace ConsoleApp13.UI
                 return;
             }
 
-            car.DisplayInfo();
+            Console.WriteLine(car.DisplayInfo());
         }
 
         private void GetAllCars()
         {
-            IEnumerable<Car> cars = _adminPanel.GetAllCars();
-
-            foreach (var car in cars)
+            foreach (var car in _adminPanel.GetAllCars())
             {
-                car.DisplayInfo();
+                Console.WriteLine(car.DisplayInfo());
             }
         }
 

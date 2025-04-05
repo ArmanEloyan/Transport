@@ -45,7 +45,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityFromId = "Enter city from ID: ".TryConvert<int>(false);
-                cityFrom = _adminPanel.GetCity(c=> c.Id == cityFromId);
+                cityFrom = _adminPanel.GetCity(c => c.Id == cityFromId);
             }
             catch (Exception ex)
             {
@@ -112,17 +112,15 @@ namespace ConsoleApp13.UI
                 return;
             }
 
-            way.DisplayInfo();
-            
+            Console.WriteLine(way.DisplayInfo());
+
         }
 
         private void GetAllWays()
         {
-            IEnumerable<Way> ways = _adminPanel.GetAllWays();
-
-            foreach (var way in ways)
+            foreach (var way in _adminPanel.GetAllWays())
             {
-                way.DisplayInfo();
+                Console.WriteLine(way.DisplayInfo());
             }
         }
 

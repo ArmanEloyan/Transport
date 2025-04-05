@@ -42,9 +42,9 @@ public class Way
         
     }
 
-    public void DisplayInfo()
+    public string DisplayInfo()
     {
-        Console.WriteLine($"Id: {Id} | CityFrom: {CityFrom.Name} | CityTo: {CityTo.Name} | StartPrice: {StartPrice}");
+         return $"Id: {Id} | CityFrom: {CityFrom.Name} | CityTo: {CityTo.Name} | StartPrice: {StartPrice}")
     }
 
 }

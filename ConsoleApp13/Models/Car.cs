@@ -106,9 +106,9 @@
             }
         }
 
-        public void DisplayInfo()
+        public string DisplayInfo()
         {
-            Console.WriteLine($"Id: {Id} | Mark: {Mark} | Model: {Model} | Year: {Year} | Coefficent: {Coefficent} | Car Type: {Type.ToString()}");
+            return $"Id: {Id} | Mark: {Mark} | Model: {Model} | Year: {Year} | Coefficent: {Coefficent} | Car Type: {Type.ToString()}";
         }
     }
 

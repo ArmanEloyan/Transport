@@ -33,9 +33,9 @@ public class City
         Name = name;
     }
 
-    public void DisplayInfo()
+    public string DisplayInfo()
     {
-        Console.WriteLine($"Id: {Id} | Name: {Name}");
+        return $"Id: {Id} | Name: {Name}";
     }
 }
 

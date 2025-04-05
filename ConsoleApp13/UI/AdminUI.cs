@@ -45,7 +45,7 @@ namespace ConsoleApp13.UI
         {
             foreach (var order in _adminPanel.GetAllOrders())
             {
-                Console.WriteLine(order.DisplayInfo()+"\n");
+                Console.WriteLine(order.DisplayInfo() + "\n");
             }
         }
 
@@ -117,7 +117,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = _adminPanel.GetCity(c=>c.Id == id);
+                city = _adminPanel.GetCity(c => c.Id == id);
             }
             catch (Exception ex)
             {
@@ -125,18 +125,16 @@ namespace ConsoleApp13.UI
                 return;
             }
 
-            city.DisplayInfo();
+            Console.WriteLine(city.DisplayInfo());
         }
 
         private void GetAllCities()
         {
             try
             {
-                IEnumerable<City> cities = _adminPanel.GetAllCities();
-
-                foreach (var city in cities)
+                foreach (var city in _adminPanel.GetAllCities())
                 {
-                    city.DisplayInfo();
+                    Console.WriteLine(city.DisplayInfo());
                 }
             }
             catch (Exception ex)

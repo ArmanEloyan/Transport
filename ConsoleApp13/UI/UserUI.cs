@@ -49,8 +49,6 @@ namespace ConsoleApp13.UI
             Car car = null;
             Way way = null;
 
-            //Order order = new Order();
-
             while (true)
             {
                 cityFrom = GetCityUI();
@@ -71,7 +69,7 @@ namespace ConsoleApp13.UI
             DateToReceve dateToReceve = GetReceveDateUI();
             string email = "Enter Email: ".TryConvertNullOrWhiteSpaceCheck(false);
 
-          //  TransportCompanyOrderSystem transportCompany = null;
+    
             Order order =_transportCompanyOrderSystem.CreateOrder(way, car, email, transportType, dateToReceve);
 
             Console.WriteLine($"Transport Cost: {order.Price}");
@@ -176,21 +174,17 @@ namespace ConsoleApp13.UI
 
         private void GetCars()
         {
-            IEnumerable<Car> cars = _userPanel.GetAllCars();
-
-            foreach (var car in cars)
+            foreach (var car in _userPanel.GetAllCars())
             {
-                car.DisplayInfo();
+                Console.WriteLine(car.DisplayInfo());
             }
         }
 
         private void GetCities()
         {
-            IEnumerable<City> cities = _userPanel.GetAllCities();
-
-            foreach (var city in cities)
+            foreach (var city in _userPanel.GetAllCities())
             {
-                city.DisplayInfo();
+                Console.WriteLine(city.DisplayInfo());
             }
         }
     }
