@@ -12,8 +12,10 @@ public class City
     private string _name;
 
     public int Id { get; set; }
+
     [JsonIgnore]
     public List<Way>? WaysFrom { get; set; }
+
     [JsonIgnore]
     public List<Way>? WaysTo { get; set; }
 

@@ -11,30 +11,7 @@ namespace ConsoleApp13
         {
             var client = new Client();
 
-            string Url = "https://localhost:7204"; // ✅ проверь порт в Swagger/в браузере
-
-            // ✅ Получение города
-            //string getCityUrl = $"{baseUrl}/city/getbyid?id=1";
-            //var city = await client.GetRequest<City>(getCityUrl);
-            //Console.WriteLine($"City: {city.Name}");
-
-
-            //string getAllCityUrl = $"{baseUrl}/city/getall";
-            //var cities = await client.GetRequest<IEnumerable<City>>(getAllCityUrl);
-
-            //foreach (var c in cities)
-            //{
-            //    Console.WriteLine($"City: {c.Name}");
-            //}
-
-            //IRepository<City, int> cityRepo1 = new Repository<City, int>(client, $"https://localhost:7204/city");
-
-            //await cityRepo1.AddAsync(new City(){Name = "dd22d" });
-
-            //   Console.WriteLine(city.DisplayInfo());
-            // Console.WriteLine($"City: {city.Name}");
-            DataContext dataContext = new DataContext();
-
+            string Url = "https://localhost:7204"; 
 
             IRepository<City, int> citiesRepo = new Repository<City, int>(client, $"{Url}/city");
             IRepository<Car, int> carRepo = new Repository<Car, int>(client, $"{Url}/car");
