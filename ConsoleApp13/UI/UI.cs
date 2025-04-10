@@ -19,19 +19,19 @@ namespace ConsoleApp13.UI
             _userUI = userUI;
         }
 
-        public void MainMenuShow()
+        public async Task MainMenuShow()
         {
             while (true)
             {
-                int op = "1. Admin | 2. User | 0. Exit".TryConvert<int>(true, ConsoleColor.Blue);
+                int op = "1. Admin | 2. User | 0. Exit".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
                 switch (op)
                 {
                     case 1:
-                        _adminUI.ShowAdminPanel();
+                       await _adminUI.ShowAdminPanel();
                         break;
                     case 2:
-                        _userUI.UserPanelShow();
+                       await _userUI.UserPanelShow();
                         break;
                     case 0:
                         return;

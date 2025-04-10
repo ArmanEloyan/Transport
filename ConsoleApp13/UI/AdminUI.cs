@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ConsoleApp13.Entities;
 
 namespace ConsoleApp13.UI
 {
@@ -15,25 +12,28 @@ namespace ConsoleApp13.UI
             _adminPanel = adminPanel;
         }
 
-        public void ShowAdminPanel()
+        public async Task ShowAdminPanel()
         {
             while (true)
             {
-                int option = "1. Cities | 2. Cars | 3. Ways  | 4. Orders | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+                int option = "1. Cities | 2. Cars | 3. Ways  | 4. Orders | 5. CarTypes | 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
                 switch (option)
                 {
                     case 1:
-                        ShowCitiesPanel();
+                       await ShowCitiesPanel();
                         break;
                     case 2:
-                        ShowCarsPanel();
+                        await ShowCarsPanel();
                         break;
                     case 3:
-                        ShowWaysPanel();
+                        await ShowWaysPanel();
                         break;
                     case 4:
-                        ShowOrders();
+                        await ShowOrders();
+                        break;
+                    case 5:
+                        await ShowCarTypePanel();
                         break;
                     case 0:
                         return;
@@ -41,35 +41,35 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void ShowOrders()
+        private async Task ShowOrders()
         {
-            foreach (var order in _adminPanel.GetAllOrders())
+            foreach (var order in await _adminPanel.GetAllOrdersAsync())
             {
                 Console.WriteLine(order.DisplayInfo() + "\n");
             }
         }
 
-        private void ShowCitiesPanel()
+        private async Task ShowCitiesPanel()
         {
             while (true)
             {
-                int option = "1. Add City | 2. Delete City | 3. Get | 4. GetAll | 5. Update | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+                int option = "1. Add City | 2. Delete City | 3. Get | 4. GetAll | 5. Update | 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
                 switch (option)
                 {
                     case 1:
-                        AddCity();
+                        await AddCity();
                         break;
                     case 2:
-                        DeleteCity();
+                       await DeleteCity();
                         break;
                     case 3:
-                        GetCity();
+                        await GetCity();
                         break;
                     case 4:
-                        GetAllCities();
+                        await GetAllCities();
                         break;
                     case 5:
-                        UpdateCity();
+                        await UpdateCity();
                         break;
                     case 0:
                         return;
@@ -77,14 +77,14 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void AddCity()
+        private async Task AddCity()
         {
             string cityName = "Enter City Name: ".TryConvertNullOrWhiteSpaceCheck(false);
 
             try
             {
                 City city = new City(cityName);
-                _adminPanel.Add(city);
+                await _adminPanel.AddAsync(city);
             }
             catch (Exception ex)
             {
@@ -92,32 +92,31 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void DeleteCity()
+        private async Task DeleteCity()
         {
             int cityId = "Enter city ID: ".TryConvert<int>(false);
             City city = null;
 
             try
             {
-                city = _adminPanel.GetCity(c => c.Id == cityId);
+                city = await _adminPanel.GetCityAsync(cityId);
+                await _adminPanel.DeleteAsync(city);
             }
             catch (Exception ex)
             {
                 Helper.ErrorMessage(ex.Message);
                 return;
             }
-
-            _adminPanel.Delete(city);
         }
 
-        private void GetCity()
+        private async Task GetCity()
         {
             City city = null;
             int id = "Enter city ID: ".TryConvert<int>(false);
 
             try
             {
-                city = _adminPanel.GetCity(c => c.Id == id);
+                city = await _adminPanel.GetCityAsync(id);
             }
             catch (Exception ex)
             {
@@ -128,11 +127,11 @@ namespace ConsoleApp13.UI
             Console.WriteLine(city.DisplayInfo());
         }
 
-        private void GetAllCities()
+        private async Task GetAllCities()
         {
             try
             {
-                foreach (var city in _adminPanel.GetAllCities())
+                foreach (var city in await _adminPanel.GetAllCitiesAsync())
                 {
                     Console.WriteLine(city.DisplayInfo());
                 }
@@ -143,14 +142,14 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void UpdateCity()
+        private async Task UpdateCity()
         {
             int id = "Enter city ID to Update: ".TryConvert<int>(false);
             City oldCity = null;
 
             try
             {
-                oldCity = _adminPanel.GetCity(c => c.Id == id);
+                oldCity = await _adminPanel.GetCityAsync(id);
             }
             catch (Exception ex)
             {
@@ -158,13 +157,14 @@ namespace ConsoleApp13.UI
                 return;
             }
 
+
             string cityNewName = "Enter new name: ".TryConvertNullOrWhiteSpaceCheck(false);
 
             oldCity.Name = cityNewName;
 
             try
             {
-                _adminPanel.Update(oldCity);
+               await _adminPanel.UpdateAsync(oldCity);
             }
             catch (Exception ex)
             {

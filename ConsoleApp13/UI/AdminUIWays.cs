@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConsoleApp13.Entities;
 
 namespace ConsoleApp13.UI
 {
     partial class AdminUI
     {
-        private void ShowWaysPanel()
+        private async Task ShowWaysPanel()
         {
             while (true)
             {
@@ -17,19 +12,19 @@ namespace ConsoleApp13.UI
                 switch (option)
                 {
                     case 1:
-                        AddWay();
+                        await AddWay();
                         break;
                     case 2:
-                        DeleteWay();
+                        await DeleteWay();
                         break;
                     case 3:
-                        GetWay();
+                        await GetWay();
                         break;
                     case 4:
-                        GetAllWays();
+                        await GetAllWays();
                         break;
                     case 5:
-                        UpdateWay();
+                        await UpdateWay();
                         break;
                     case 0:
                         return;
@@ -37,7 +32,7 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void AddWay()
+        private async Task AddWay()
         {
             City cityFrom = null;
             City cityTo = null;
@@ -45,7 +40,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityFromId = "Enter city from ID: ".TryConvert<int>(false);
-                cityFrom = _adminPanel.GetCity(c => c.Id == cityFromId);
+                cityFrom = await _adminPanel.GetCityAsync(cityFromId);
             }
             catch (Exception ex)
             {
@@ -56,7 +51,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityToId = "Enter city to ID: ".TryConvert<int>(false);
-                cityTo = _adminPanel.GetCity(c => c.Id == cityToId);
+                cityTo = await _adminPanel.GetCityAsync(cityToId);
             }
             catch (Exception ex)
             {
@@ -69,6 +64,23 @@ namespace ConsoleApp13.UI
             try
             {
                 way = new Way(cityFrom, cityTo, price);
+                await _adminPanel.AddAsync(way);
+            }
+            catch (Exception ex)
+            {
+                Helper.ErrorMessage(ex.Message);
+                return;
+            }
+        }
+
+        private async Task DeleteWay()
+        {
+            int id = "Enter way ID: ".TryConvert<int>(false);
+            Way way = null;
+
+            try
+            {
+                way = await _adminPanel.GetWayAsync(id);
             }
             catch (Exception ex)
             {
@@ -76,35 +88,24 @@ namespace ConsoleApp13.UI
                 return;
             }
 
-            _adminPanel.AddWay(way);
-        }
-
-        private void DeleteWay()
-        {
-            int id = "Enter way ID: ".TryConvert<int>(false);
-            Way way = null;
-
             try
             {
-                way = _adminPanel.GetWay(w => w.Id == id);
+                await _adminPanel.DeleteAsync(way);
             }
             catch (Exception ex)
             {
                 Helper.ErrorMessage(ex.Message);
-                return;
             }
-
-            _adminPanel.DeleteWay(way);
         }
 
-        private void GetWay()
+        private async Task GetWay()
         {
             Way way = null;
             int id = "Enter way ID: ".TryConvert<int>(false);
 
             try
             {
-                way = _adminPanel.GetWay(w => w.Id == id);
+                way = await _adminPanel.GetWayAsync(id);
             }
             catch (Exception ex)
             {
@@ -116,15 +117,23 @@ namespace ConsoleApp13.UI
 
         }
 
-        private void GetAllWays()
+        private async Task GetAllWays()
         {
-            foreach (var way in _adminPanel.GetAllWays())
-            {
-                Console.WriteLine(way.DisplayInfo());
-            }
+         //   try
+          //  {
+                foreach (var way in await _adminPanel.GetAllWaysAsync())
+                {
+                    Console.WriteLine("test");
+                    Console.WriteLine(way.DisplayInfo());
+                }
+          // }
+          //  catch (Exception ex)
+           // {
+           //     Helper.ErrorMessage(ex.Message);
+           // }
         }
 
-        private void UpdateWay()
+        private async Task UpdateWay()
         {
             while (true)
             {
@@ -133,7 +142,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    oldWayObj = _adminPanel.GetWay(w => w.Id == id);
+                    oldWayObj = await _adminPanel.GetWayAsync(id);
                 }
                 catch (Exception ex)
                 {
@@ -150,7 +159,7 @@ namespace ConsoleApp13.UI
                         int idCityFrom = "Enter new City Id: ".TryConvert<int>(false);
                         try
                         {
-                            oldWayObj.CityFrom = _adminPanel.GetCity(c => c.Id == idCityFrom);
+                            oldWayObj.CityFrom = await _adminPanel.GetCityAsync(idCityFrom);
                         }
                         catch (Exception ex)
                         {
@@ -161,7 +170,7 @@ namespace ConsoleApp13.UI
                         int idCityTo = "Enter new City Id: ".TryConvert<int>(false);
                         try
                         {
-                            oldWayObj.CityTo = _adminPanel.GetCity(c => c.Id == idCityTo);
+                            oldWayObj.CityTo = await _adminPanel.GetCityAsync(idCityTo);
                         }
                         catch (Exception ex)
                         {
@@ -184,7 +193,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    _adminPanel.Update(oldWayObj);
+                    await _adminPanel.UpdateAsync(oldWayObj);
                 }
                 catch (Exception ex)
                 {

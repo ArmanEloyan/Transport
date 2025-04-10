@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+namespace TransportSystemWebApp.Entities;
 
 public class City
 {
     private string _name;
 
     public int Id { get; set; }
-    public List<Way> WaysFrom { get; set; }
-    public List<Way> WaysTo { get; set; }
+    [JsonIgnore]
+    public List<Way>? WaysFrom { get; set; }
+    [JsonIgnore]
+    public List<Way>? WaysTo { get; set; }
 
 
     public string Name
@@ -33,9 +37,9 @@ public class City
         Name = name;
     }
 
-    public string DisplayInfo()
+    public City()
     {
-        return $"Id: {Id} | Name: {Name}";
+            
     }
 }
 

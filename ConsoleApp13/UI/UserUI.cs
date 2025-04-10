@@ -1,4 +1,4 @@
-﻿using ConsoleApp13.Models;
+﻿using ConsoleApp13.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,22 +19,22 @@ namespace ConsoleApp13.UI
             _transportCompanyOrderSystem = transportCompanyOrderSystem;
         }
 
-        public void UserPanelShow()
+        public async Task UserPanelShow()
         {
             while (true)
             {
-                int option = "1. Get Cities | 2.Get Cars | 3. Start 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+                int option = "1. Get Ways | 2.Get Cars | 3. Start 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
                 switch (option)
                 {
                     case 1:
-                        GetCities();
+                        await GetWays();
                         break;
                     case 2:
-                        GetCars();
+                       await GetCars();
                         break;
                     case 3:
-                        Start();
+                       await Start();
                         break;
                     case 0:
                         return;
@@ -42,7 +42,7 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void Start()
+        private async Task Start()
         {
             City cityFrom = null;
             City cityTo = null;
@@ -51,19 +51,16 @@ namespace ConsoleApp13.UI
 
             while (true)
             {
-                cityFrom = GetCityUI();
-                cityTo = GetCityUI();
+                way = await GetWay();
 
-                if (!_userPanel.CheckHasWay(cityFrom, cityTo, out way))
-                {
-                    Helper.ErrorMessage("Cant find this way");
+                if (way == null)
                     continue;
-                }
+
                 break;
             }
 
             TransportType transportType = GetTransportTypeUI();
-            car = GetCarUI();
+            car = await GetCarUI();
             car.IsOperable = IsOperableUI();
 
             DateToReceve dateToReceve = GetReceveDateUI();
@@ -74,7 +71,7 @@ namespace ConsoleApp13.UI
 
             Console.WriteLine($"Transport Cost: {order.Price}");
 
-            int payOption = "1. Pay | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+            int payOption = "1. Pay | 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
             if (payOption == 1)
             {
@@ -87,14 +84,14 @@ namespace ConsoleApp13.UI
 
         }
 
-        private City GetCityUI()
+        private async Task<Way> GetWay()
         {
             while (true)
             {
-                int id = "Enter City Id: ".TryConvert<int>(false);
+                int id = "Enter Way Id: ".TryConvert<int>(false);
                 try
                 {
-                    return _userPanel.GetCity(c => c.Id == id);
+                    return await _userPanel.GetWay(id);
                 }
                 catch (Exception ex)
                 {
@@ -107,7 +104,7 @@ namespace ConsoleApp13.UI
         {
             while (true)
             {
-                int type = "Enter Transport Type: 1. Open 2. Enclosed".TryConvert<int>(true, ConsoleColor.Blue);
+                int type = "Enter Transport Type: 1. Open 2. Enclosed".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
                 if (type == 1)
                 {
                     return TransportType.Open;
@@ -123,7 +120,7 @@ namespace ConsoleApp13.UI
         {
             while (true)
             {
-                int type = "Enter Date to Receve: 1. Week 2. Month 3. 2 Months".TryConvert<int>(true, ConsoleColor.Blue);
+                int type = "Enter Date to Receve: 1. Week 2. Month 3. 2 Months".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
                 if (type == 1)
                 {
                     return DateToReceve.Week;
@@ -139,7 +136,7 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private Car GetCarUI()
+        private async Task<Car> GetCarUI()
         {
             while (true)
             {
@@ -147,7 +144,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    return _userPanel.GetCar(c => c.Id == carId);
+                    return await _userPanel.GetCar(carId);
                 }
                 catch (Exception ex)
                 {
@@ -172,19 +169,33 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void GetCars()
+        private async Task GetCars()
         {
-            foreach (var car in _userPanel.GetAllCars())
+            try
             {
-                Console.WriteLine(car.DisplayInfo());
+                foreach (var car in await _userPanel.GetAllCars())
+                {
+                    Console.WriteLine(car.DisplayInfo());
+                }
+            }
+            catch (Exception ex)
+            {
+                Helper.ErrorMessage(ex.Message);
             }
         }
 
-        private void GetCities()
+        private async Task GetWays()
         {
-            foreach (var city in _userPanel.GetAllCities())
+            try
             {
-                Console.WriteLine(city.DisplayInfo());
+                foreach (var way in await _userPanel.GetAllWays())
+                {
+                    Console.WriteLine(way.DisplayInfo());
+                }
+            }
+            catch (Exception ex)
+            {
+                Helper.ErrorMessage(ex.Message);
             }
         }
     }

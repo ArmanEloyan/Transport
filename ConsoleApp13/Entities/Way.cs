@@ -1,10 +1,12 @@
-﻿using System;
+﻿using ConsoleApp13.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+namespace ConsoleApp13.Entities;
 
 public class Way
 {
@@ -14,8 +16,8 @@ public class Way
     public int CityFromId { get; set; }
     public int CityToId { get; set; }
 
-    public City CityFrom { get; internal set; }
-    public City CityTo { get; internal set; }
+    public City CityFrom { get; set; }
+    public City CityTo { get; set; }
 
     public double StartPrice
     {

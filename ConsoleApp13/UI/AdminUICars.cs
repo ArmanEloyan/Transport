@@ -1,4 +1,4 @@
-﻿using ConsoleApp13.Models;
+﻿using ConsoleApp13.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +9,27 @@ namespace ConsoleApp13.UI
 {
     partial class AdminUI
     {
-        private void ShowCarsPanel()
+        private async Task ShowCarsPanel()
         {
             while (true)
             {
-                int option = "1. Add Car | 2. Delete Car | 3. Get | 4. GetAll | 5. Update | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+                int option = "1. Add Car | 2. Delete Car | 3. Get | 4. GetAll | 5. Update | 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
                 switch (option)
                 {
                     case 1:
-                        AddCar();
+                        await AddCar();
                         break;
                     case 2:
-                        DeleteCar();
+                        await DeleteCar();
                         break;
                     case 3:
-                        GetCar();
+                        await GetCar();
                         break;
                     case 4:
-                        GetAllCars();
+                        await GetAllCars();
                         break;
                     case 5:
-                        UpdateCar();
+                        await UpdateCar();
                         break;
                     case 0:
                         return;
@@ -37,29 +37,34 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void AddCar()
+        private async Task AddCar()
         {
+            CarType carType = null;
+
             string carMark = "Enter Mark: ".TryConvertNullOrWhiteSpaceCheck(false);
             string carModel = "Enter Model: ".TryConvertNullOrWhiteSpaceCheck(false); ;
             int carYear = "Enter Year: ".TryConvert<int>(false);
 
-            int carType = 0;
+            int carTypeId = 0;
             while (true)
             {
-                carType = "Enter Car Type (1. Sedan | 2. Jeep | 3. Moto | 4. Truck)".TryConvert<int>(true, ConsoleColor.Blue);
-                carType--;
+                carTypeId = "Enter Car Type Id: ".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
-                if(carType >= 0 && carType < 4)
+                try
                 {
+                    carType = await _adminPanel.GetCarTypeAsync(carTypeId);
                     break;
                 }
+                catch (Exception ex)
+                {
+                    Helper.ErrorMessage(ex.Message);
+                }
             }
-            CarType type = (CarType)carType;
 
             try
             {
-                Car car = new Car(carMark, carModel, carYear, type);
-                _adminPanel.Add(car);
+                Car car = new Car(carMark, carModel, carYear, carType) { CarTypeId =carTypeId};
+                await _adminPanel.AddAsync(car);
             }
             catch (Exception ex)
             {
@@ -67,14 +72,14 @@ namespace ConsoleApp13.UI
             }
         }
 
-        private void DeleteCar()
+        private async Task DeleteCar()
         {
             int carId = "Enter car ID: ".TryConvert<int>(false);
             Car car = null;
 
             try
             {
-                car = _adminPanel.GetCar(c => c.Id == carId);
+                car = await _adminPanel.GetCarAsync(carId);
             }
             catch (Exception ex)
             {
@@ -82,17 +87,17 @@ namespace ConsoleApp13.UI
                 return;
             }
 
-            _adminPanel.Delete(car);
+            await _adminPanel.DeleteAsync(car);
         }
 
-        private void GetCar()
+        private async Task GetCar()
         {
             Car car = null;
             int id = "Enter car ID: ".TryConvert<int>(false);
 
             try
             {
-                car = _adminPanel.GetCar(c=>c.Id == id);
+                car = await _adminPanel.GetCarAsync(id);
             }
             catch (Exception ex)
             {
@@ -103,15 +108,22 @@ namespace ConsoleApp13.UI
             Console.WriteLine(car.DisplayInfo());
         }
 
-        private void GetAllCars()
+        private async Task GetAllCars()
         {
-            foreach (var car in _adminPanel.GetAllCars())
+            try
             {
-                Console.WriteLine(car.DisplayInfo());
+                foreach (var car in await _adminPanel.GetAllCarsAsync())
+                {
+                    Console.WriteLine(car.DisplayInfo());
+                }
+            }
+            catch (Exception ex)
+            {
+                Helper.ErrorMessage(ex.Message);
             }
         }
 
-        private void UpdateCar()
+        private async Task UpdateCar()
         {
             while (true)
             {
@@ -120,7 +132,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    car = _adminPanel.GetCar(c => c.Id == id);
+                    car = await _adminPanel.GetCarAsync(id);
                 }
                 catch (Exception ex)
                 {
@@ -129,7 +141,7 @@ namespace ConsoleApp13.UI
                 }
 
                 Console.WriteLine("What you want to change?");
-                int option = "1. Mark | 2. Model | 3. Year | 4. Type | 0. Back".TryConvert<int>(true, ConsoleColor.Blue);
+                int option = "1. Mark | 2. Model | 3. Year | 4. Type | 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
                 switch (option)
                 {
@@ -152,26 +164,22 @@ namespace ConsoleApp13.UI
                         }
                         break;
                     case 4:
-                        try
+                        CarType carType = null;
+                        int carTypeId = 0;
+                        while (true)
                         {
-                            int op = 0;
+                            carTypeId = "Enter Car Type Id: ".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
-                            Console.WriteLine("(1. Sedan | 2. Jeep | 3. Moto | 4. Truck)");
-                            while (true)
+                            try
                             {
-                                op = "Enter Type option: ".TryConvert<int>(true);
-                                op--;
-                                if (op >= 0 && op < 4)
-                                {
-                                    break;
-                                }
+                                carType = await _adminPanel.GetCarTypeAsync(carTypeId);
+                                car.Type = carType;
+                                break;
                             }
-                            car.Type = (CarType)op;
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            Helper.ErrorMessage(ex.Message);
+                            catch (Exception ex)
+                            {
+                                Helper.ErrorMessage(ex.Message);
+                            }
                         }
                         break;
                     case 0:
@@ -180,7 +188,8 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    _adminPanel.Update(car);
+                    await _adminPanel.UpdateAsync(car);
+                    return;
                 }
                 catch (Exception ex)
                 {

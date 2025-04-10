@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsoleApp13.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250404153945_Order-2")]
-    partial class Order2
+    [Migration("20250409100722_CarTypes")]
+    partial class CarTypes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,8 +50,8 @@ namespace ConsoleApp13.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("Coefficent")
-                        .HasColumnType("float");
+                    b.Property<int>("CarTypeId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsOperable")
                         .HasColumnType("bit");
@@ -64,15 +64,34 @@ namespace ConsoleApp13.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CarTypeId");
+
                     b.ToTable("Cars");
+                });
+
+            modelBuilder.Entity("ConsoleApp13.Models.CarType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Coefficent")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CarTypes");
                 });
 
             modelBuilder.Entity("ConsoleApp13.Models.Order", b =>
@@ -137,16 +156,27 @@ namespace ConsoleApp13.Migrations
                     b.ToTable("Ways");
                 });
 
+            modelBuilder.Entity("ConsoleApp13.Models.Car", b =>
+                {
+                    b.HasOne("ConsoleApp13.Models.CarType", "Type")
+                        .WithMany("Cars")
+                        .HasForeignKey("CarTypeId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("ConsoleApp13.Models.Order", b =>
                 {
                     b.HasOne("ConsoleApp13.Models.Car", "CarObj")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
                     b.HasOne("Way", "WayObj")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("WayId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
@@ -180,6 +210,21 @@ namespace ConsoleApp13.Migrations
                     b.Navigation("WaysFrom");
 
                     b.Navigation("WaysTo");
+                });
+
+            modelBuilder.Entity("ConsoleApp13.Models.Car", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ConsoleApp13.Models.CarType", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Way", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

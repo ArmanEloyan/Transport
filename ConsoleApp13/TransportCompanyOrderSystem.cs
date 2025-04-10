@@ -1,4 +1,4 @@
-﻿using ConsoleApp13.Models;
+﻿using ConsoleApp13.Entities;
 using ConsoleApp13.Repos;
 using System;
 using System.Collections.Generic;
@@ -12,9 +12,9 @@ namespace ConsoleApp13
     {
         public event Action<Order> OrderCompleted;
 
-        IRepository<Order> _ordersRepository;
+        IRepository<Order,int> _ordersRepository;
 
-        public TransportCompanyOrderSystem(IRepository<Order> ordersRepository)
+        public TransportCompanyOrderSystem(IRepository<Order,int> ordersRepository)
         {
             OrderCompleted = AddOrder;
             OrderCompleted += SendMail;
@@ -40,7 +40,7 @@ namespace ConsoleApp13
                 price *= 1.3;
             }
 
-            price *= car.Coefficent;
+            price *= car.Type.Coefficent;
             price *= CalculateDateToRecieveCoefficent(recieveDate);
             return price;
         }
@@ -96,7 +96,7 @@ namespace ConsoleApp13
                 throw new Exception("Order cant be null");
             }
 
-            _ordersRepository.Add(order);
+            _ordersRepository.AddAsync(order);
         }
 
         public void SendMail(Order order)

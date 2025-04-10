@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp13", "ConsoleApp13\ConsoleApp13.csproj", "{B1A11C8F-62DA-4319-99F1-7C225BEE204E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportSystemWebApp", "TransportSystemWebApp\TransportSystemWebApp.csproj", "{EA34EB0B-74FB-49D6-8A6B-42B07811CDD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B1A11C8F-62DA-4319-99F1-7C225BEE204E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1A11C8F-62DA-4319-99F1-7C225BEE204E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1A11C8F-62DA-4319-99F1-7C225BEE204E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA34EB0B-74FB-49D6-8A6B-42B07811CDD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA34EB0B-74FB-49D6-8A6B-42B07811CDD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA34EB0B-74FB-49D6-8A6B-42B07811CDD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA34EB0B-74FB-49D6-8A6B-42B07811CDD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

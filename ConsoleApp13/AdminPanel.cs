@@ -3,95 +3,142 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApp13.Models;
+using ConsoleApp13.Entities;
 using ConsoleApp13.Repos;
 
 namespace ConsoleApp13
 {
     internal class AdminPanel // // s_CitiesRepo, s_CarRepo, s_WaysRepo
     {
-        private IRepository<City> _citiesRepo;
-        private IRepository<Car> _carRepo;
-        private IRepository<Way> _waysRepo;
-        private IRepository<Order> _orderRepo;
+        private IRepository<City, int> _citiesRepo;
+        private IRepository<Car, int> _carRepo;
+        private IRepository<Way, int> _waysRepo;
+        private IRepository<Order, int> _orderRepo;
+        private IRepository<CarType, int> _carTypeRepo;
 
-        public AdminPanel(IRepository<City> citiesRepo, IRepository<Car> carRepo, IRepository<Way> waysRepo, IRepository<Order> orderRepo)
+        public AdminPanel(IRepository<City, int> citiesRepo, IRepository<Car, int> carRepo, IRepository<Way, int> waysRepo, IRepository<Order, int> orderRepo, IRepository<CarType, int> carTypeRepo)
         {
             _citiesRepo = citiesRepo;
             _carRepo = carRepo;
             _waysRepo = waysRepo;
             _orderRepo = orderRepo;
+            _carTypeRepo = carTypeRepo;
         }
 
-        public void Add(City city) => _citiesRepo.Add(city);
-
-        public void Add(Car car) => _carRepo.Add(car);
-
-        public void AddRange(IEnumerable<City> cities) => _citiesRepo.AddRange(cities);
-
-        public void AddRange(IEnumerable<Car> cars) => _carRepo.AddRange(cars);
-
-        public void AddRange(IEnumerable<Way> ways) => _waysRepo.AddRange(ways);
-
-        public void Delete(City city)
+        public async Task AddAsync(City city)
         {
-            foreach (var wayFrom in city.WaysFrom)
+            if (city == null)
             {
-                _waysRepo.Delete(wayFrom);
+                throw new ArgumentNullException("City cannot be null");
             }
 
-            foreach (var wayTo in city.WaysTo)
-            {
-                _waysRepo.Delete(wayTo);
-            }
-
-            _citiesRepo.Delete(city);
+         //   CityDTO
+            await _citiesRepo.AddAsync(city);
         }
 
-        public void Delete(Car car) => _carRepo.Delete(car);
-
-        public void Update(City newCity) => _citiesRepo.Update(newCity);
-
-        public void Update(Car newCar) => _carRepo.Update(newCar);
-
-        public City GetCity(Func<City, bool> predicate) => _citiesRepo.Get(predicate);
-
-        public Car GetCar(Func<Car, bool> predicate) => _carRepo.Get(predicate);
-
-        public IEnumerable<City> GetAllCities() => _citiesRepo.GetAll();
-
-        public IEnumerable<Car> GetAllCars() => _carRepo.GetAll();
-
-        public IEnumerable<Order> GetAllOrders() => _orderRepo.GetAll();
-
-
-        private bool ContainsCity(City city)
+        public async Task AddAsync(Car car)
         {
-            IEnumerable<City> cityes = _citiesRepo.GetAll();
-            if (cityes.Any(n => n.Id == city.Id))
+            if (car == null)
             {
-                return true;
+                throw new ArgumentNullException("Car cannot be null");
             }
-            return false;
+
+            await _carRepo.AddAsync(car);
         }
 
-        public void AddWay(Way way)
+        public async Task AddAsync(CarType carType)
         {
-            if (ContainsCity(way.CityFrom) && ContainsCity(way.CityTo))
+            if (carType == null)
             {
-                _waysRepo.Add(way);
-                return;
+                throw new ArgumentNullException("CarType cannot be null");
             }
 
-            throw new Exception("Cant add way. Cities does not find");
+            await _carTypeRepo.AddAsync(carType);
         }
 
-        public void DeleteWay(Way cityFromTo) => _waysRepo.Delete(cityFromTo);
+        public async Task AddAsync(Way way)
+        {
+            if(way == null)
+            {
+                throw new ArgumentNullException("Way cannot be null");
+            }
 
-        public Way GetWay(Func<Way, bool> predicate) => _waysRepo.Get(predicate);
+            if (way.CityFrom.Id == way.CityTo.Id)
+            {
+                throw new Exception("CityFrom and CityTo cant be the same");
+            }
 
-        public IEnumerable<Way> GetAllWays() => _waysRepo.GetAll();
+            await _waysRepo.AddAsync(way);
+        }
 
-        public void Update(Way newCityFromTo) => _waysRepo.Update(newCityFromTo);
+        public async Task DeleteAsync(City city)
+        {
+            await _citiesRepo.DeleteAsync(city.Id);
+        }
+
+        public async Task DeleteAsync(Car car) => await _carRepo.DeleteAsync(car.Id);
+
+        public async Task DeleteAsync(Way cityFromTo) => await _waysRepo.DeleteAsync(cityFromTo.Id);
+
+        public async Task DeleteAsync(CarType carType) => await _carTypeRepo.DeleteAsync(carType.Id);
+
+        public async Task UpdateAsync(City newCity)
+        {
+            if (newCity == null)
+            {
+                throw new ArgumentNullException("City cannot be null");
+            }
+
+            await _citiesRepo.UpdateAsync(newCity);
+        }
+
+        public async Task UpdateAsync(Way newWay)
+        {
+            if (newWay == null)
+            {
+                throw new ArgumentNullException("Way cannot be null");
+            }
+
+            await _waysRepo.UpdateAsync(newWay);
+
+        }
+
+        public async Task UpdateAsync(Car newCar)
+        {
+            if (newCar == null)
+            {
+                throw new ArgumentNullException("Car cannot be null");
+            }
+
+            await _carRepo.UpdateAsync(newCar);
+        }
+
+        public async Task UpdateAsync(CarType newCarType)
+        {
+            if (newCarType == null)
+            {
+                throw new ArgumentNullException("CarType cannot be null");
+            }
+
+            await _carTypeRepo.UpdateAsync(newCarType);
+        }
+
+        public async Task<City> GetCityAsync(int id) => await _citiesRepo.GetAsync(id);
+
+        public async Task<Car> GetCarAsync(int id) => await _carRepo.GetAsync(id);
+
+        public async Task<Way> GetWayAsync(int id) => await _waysRepo.GetAsync(id);
+
+        public async Task<CarType> GetCarTypeAsync(int id) => await _carTypeRepo.GetAsync(id);
+
+        public async Task<IEnumerable<City>> GetAllCitiesAsync() => await _citiesRepo.GetAllAsync();
+
+        public async Task<IEnumerable<Car>> GetAllCarsAsync() => await _carRepo.GetAllAsync();
+
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync() => await _orderRepo.GetAllAsync();
+
+        public async Task<IEnumerable<Way>> GetAllWaysAsync() => await _waysRepo.GetAllAsync();
+
+        public async Task<IEnumerable<CarType>> GetAllCarTypesAsync() => await _carTypeRepo.GetAllAsync();
     }
 }

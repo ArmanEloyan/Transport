@@ -4,82 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApp13.Models;
+using ConsoleApp13.Entities;
 
 namespace ConsoleApp13.Repos
 {
-    internal class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    internal class Repository<TEntity,TKey> : IRepository<TEntity,TKey> where TEntity : class
     {
-        private readonly DataContext _dataContext;
+        private readonly Client _client;
+        private readonly string _url;
 
-        public Repository(DataContext dataContext)
+        public Repository(Client client, string url)
         {
-            _dataContext = dataContext;
+            _client = client;
+            _url = url;
         }
 
-        public void Add(TEntity value)
+        public async Task AddAsync(TEntity value)
         {
-            if (value == null)
-                throw new ArgumentNullException("Value cant be null");
-
-            _dataContext.Set<TEntity>().Add(value);
-            _dataContext.SaveChanges();
+            string addUrl = $"{_url}/Add";
+            await _client.PostRequest(addUrl, value);
         }
 
-        public void AddRange(IEnumerable<TEntity> values)
+        public async Task DeleteAsync(TKey id)
         {
-            if (values == null)
-                throw new ArgumentNullException("Values cant be null");
-
-            _dataContext.Set<TEntity>().AddRange(values);
-            _dataContext.SaveChanges();
+            string deleteUrl = $"{_url}/Delete?id={id}";
+            await _client.DeleteRequest(deleteUrl);
         }
 
-        public void Delete(TEntity value)
+        public async Task UpdateAsync(TEntity newEntity)
         {
-            _dataContext.Set<TEntity>().Remove(value);
-            _dataContext.SaveChanges();
+            string updateUrl = $"{_url}/Update";
+            await _client.PutRequest(updateUrl, newEntity);
+
         }
 
-        public TEntity Get(Func<TEntity, bool> predicate)
+        public async Task<TEntity> GetAsync(TKey key)
         {
-            TEntity entity = _dataContext.Set<TEntity>().FirstOrDefault(predicate);
-
-            if (entity == null)
-                throw new Exception("Cant find");
-
-            return entity;
+            string getUrl = $"{_url}/GetById?id={key}";
+            return await _client.GetRequest<TEntity>(getUrl);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return ApplyIncludes(_dataContext.Set<TEntity>()).AsEnumerable();
-        }
-
-        public void Update(TEntity newEntity)
-        {
-            _dataContext.Set<TEntity>().Update(newEntity);
-        }
-
-        private IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> query)
-        {
-            if (typeof(TEntity) == typeof(Way))
-            {
-                return query
-                    .Include(e => ((Way)(object)e).CityFrom)
-                    .Include(e => ((Way)(object)e).CityTo);
-            }
-            else if (typeof(TEntity) == typeof(Order))
-            {
-                return query
-                    .Include(e => ((Order)(object)e).WayObj)
-                        .ThenInclude(w => w.CityFrom)
-                    .Include(e => ((Order)(object)e).WayObj)
-                        .ThenInclude(w => w.CityTo)
-                    .Include(e => ((Order)(object)e).CarObj);
-            }
-
-            return query;
+            string getAllUrl = $"{_url}/GetAll";
+            return await _client.GetRequest<IEnumerable<TEntity>>(getAllUrl);
         }
     }
 }

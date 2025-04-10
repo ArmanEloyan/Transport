@@ -47,7 +47,7 @@ namespace ConsoleApp13
             }
         }
 
-        public static T TryConvert<T>(this string text, bool isNewLine, ConsoleColor color)
+        public static T TryConvertWithMessage<T>(this string text, bool isNewLine, ConsoleColor color)
         {
             T number;
 
