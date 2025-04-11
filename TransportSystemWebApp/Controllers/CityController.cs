@@ -48,8 +48,6 @@ namespace TransportSystemWebApp.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            
-            
             }
         }
 

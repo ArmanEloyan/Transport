@@ -33,12 +33,6 @@ namespace TransportSystemWebApp
             builder.Services.AddSingleton<IService<Order>, Service<Order>>();
 
             builder.Services.AddAutoMapper(typeof(Program));
-
-            // AutoMapper.ServiceCollectionExtensions.AddAutoMapper(builder.Services, typeof(Program));
-
-
-
-
             builder.Services.AddSingleton<DataContext>();
 
 
