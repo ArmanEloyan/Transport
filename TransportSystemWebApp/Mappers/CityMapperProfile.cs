@@ -2,14 +2,13 @@
 using TransportSystemWebApp.Entities;
 using AutoMapper;
 
-namespace TransportSystemWebApp.Mappers
+namespace TransportSystemWebApp.Mappers;
+
+public class CityMapperProfile : Profile
 {
-    public class CityMapperProfile : Profile
+    public CityMapperProfile()
     {
-        public CityMapperProfile()
-        {
-            CreateMap<CityCreateDTO, City>();
-            CreateMap<CityGetOrUpdateDTO, City>().ReverseMap();
-        }
+        CreateMap<CityCreateDTO, City>();
+        CreateMap<CityGetOrUpdateDTO, City>().ReverseMap();
     }
 }

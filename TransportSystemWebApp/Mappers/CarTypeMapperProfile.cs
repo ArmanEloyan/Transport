@@ -2,14 +2,13 @@
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Models;
 
-namespace TransportSystemWebApp.Mappers
+namespace TransportSystemWebApp.Mappers;
+
+public class CarTypeMapperProfile :Profile
 {
-    public class CarTypeMapperProfile :Profile
+    public CarTypeMapperProfile()
     {
-        public CarTypeMapperProfile()
-        {
-            CreateMap<CarTypeCreateDTO, CarType>();
-            CreateMap<CarTypeGetOrUpdateDTO, CarType>().ReverseMap();
-        }
+        CreateMap<CarTypeCreateDTO, CarType>();
+        CreateMap<CarTypeGetOrUpdateDTO, CarType>().ReverseMap();
     }
 }

@@ -3,15 +3,14 @@ using System.ComponentModel.DataAnnotations;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Models;
 
-namespace TransportSystemWebApp.Mappers
+namespace TransportSystemWebApp.Mappers;
+
+public class OrderMapperProfile : Profile
 {
-    public class OrderMapperProfile : Profile
+    public OrderMapperProfile()
     {
-        public OrderMapperProfile()
-        {
-            CreateMap<OrderCreateDTO, Order>();
-            CreateMap<OrderUpdateDTO, Order>();
-            CreateMap<Order, OrderGetDTO>();
-        }
+        CreateMap<OrderCreateDTO, Order>();
+        CreateMap<OrderUpdateDTO, Order>();
+        CreateMap<Order, OrderGetDTO>();
     }
 }

@@ -2,15 +2,14 @@
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Models;
 
-namespace TransportSystemWebApp.Mappers
+namespace TransportSystemWebApp.Mappers;
+
+public class WayMapperProfile : Profile
 {
-    public class WayMapperProfile : Profile
+    public WayMapperProfile()
     {
-        public WayMapperProfile()
-        {
-            CreateMap<WayCreateDTO, Way>();
-            CreateMap<WayUpdateDTO, Way>();
-            CreateMap<Way, WayGetDTO>();
-        }
+        CreateMap<WayCreateDTO, Way>();
+        CreateMap<WayUpdateDTO, Way>();
+        CreateMap<Way, WayGetDTO>();
     }
 }

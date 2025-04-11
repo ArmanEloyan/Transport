@@ -23,7 +23,7 @@ namespace TransportSystemWebApp.Controllers
         [HttpPost("Add")]
         public async Task<ActionResult> AddWay(WayCreateDTO wayDTO)
         {
-            if(wayDTO.CityFromId == wayDTO.CityToId)
+            if (wayDTO.CityFromId == wayDTO.CityToId)
             {
                 return BadRequest("CityFrom and CityTo cannot be the same");
             }
