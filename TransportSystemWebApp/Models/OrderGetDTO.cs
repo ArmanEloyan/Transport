@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TransportSystemWebApp.Entities;
 
-namespace ConsoleApp13.Models;
+namespace TransportSystemWebApp.Models;
 
-public class OrderDTO
+public class OrderGetDTO
 {
+    [Required(ErrorMessage = "Id is required")]
+    public int Id { get; set; }
+
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress(ErrorMessage = "Email is not valid")]
     public string Email { get; set; }
@@ -23,4 +27,7 @@ public class OrderDTO
 
     [Required(ErrorMessage = "RecieveDate is required")]
     public DateTime RecieveDate { get; set; }
+
+    public Way WayObj { get; set; }
+    public Car CarObj { get; set; }
 }

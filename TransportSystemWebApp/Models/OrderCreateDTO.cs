@@ -3,7 +3,7 @@ using TransportSystemWebApp.Entities;
 
 namespace TransportSystemWebApp.Models
 {
-    public class OrderDTO
+    public class OrderCreateDTO
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Email is not valid")]

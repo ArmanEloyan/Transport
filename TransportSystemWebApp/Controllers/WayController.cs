@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Mappers;
 using TransportSystemWebApp.Models;
@@ -11,16 +12,16 @@ namespace TransportSystemWebApp.Controllers
     public class WayController : Controller
     {
         private readonly IService<Way> _wayService;
-        private readonly IMapper<WayDTO, Way> _wayMapper;
+        private readonly IMapper _wayMapper;
 
-        public WayController(IService<Way> wayService, IMapper<WayDTO, Way> wayMapper)
+        public WayController(IService<Way> wayService, IMapper wayMapper)
         {
             _wayService = wayService;
             _wayMapper = wayMapper;
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult> AddWay(WayDTO wayDTO)
+        public async Task<ActionResult> AddWay(WayCreateDTO wayDTO)
         {
             if(wayDTO.CityFromId == wayDTO.CityToId)
             {
@@ -29,7 +30,7 @@ namespace TransportSystemWebApp.Controllers
 
             try
             {
-                Way way = _wayMapper.Map(wayDTO);
+                Way way = _wayMapper.Map<Way>(wayDTO);
                 await _wayService.AddAsync(way);
 
                 return Ok();
@@ -56,7 +57,7 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ActionResult> Update([FromBody] Way way)
+        public async Task<ActionResult> Update([FromBody] WayUpdateDTO way)
         {
             if (way.CityFromId == way.CityToId)
             {
@@ -65,7 +66,8 @@ namespace TransportSystemWebApp.Controllers
 
             try
             {
-                await _wayService.UpdateAsync(way);
+                Way wayUpdate = _wayMapper.Map<Way>(way);
+                await _wayService.UpdateAsync(wayUpdate);
                 return Ok(way);
             }
             catch (Exception ex)
@@ -75,17 +77,18 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<ActionResult<Way>> GetCityAsync(int id)
+        public async Task<ActionResult<WayGetDTO>> GetCityAsync(int id)
         {
             try
             {
-                var city = await _wayService.GetAsync(c => c.Id == id);
-                if (city == null)
+                Way way = await _wayService.GetAsync(c => c.Id == id);
+                WayGetDTO wayGetDTO = _wayMapper.Map<WayGetDTO>(way);
+                if (way == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(city);
+                return Ok(way);
             }
             catch (Exception ex)
             {
@@ -94,24 +97,13 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<Way>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<WayGetDTO>>> GetAllAsync()
         {
-            //WaysMapper mapper = new WaysMapper();
-            //try
-            //{
-            //    IEnumerable<WayDTO> wayDTOs = mapper.Map(await _wayService.GetAllAsync());
-            //    return Ok(wayDTOs);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(ex.Message);
-            //}
-
-          //  WaysMapper mapper = new WaysMapper();
             try
             {
-              //  IEnumerable<WayDTO> wayDTOs = mapper.Map(await _wayService.GetAllAsync());
-                return Ok(await _wayService.GetAllAsync());
+                IEnumerable<Way> ways = await _wayService.GetAllAsync();
+                IEnumerable<WayGetDTO> waysDTO = _wayMapper.Map<IEnumerable<WayGetDTO>>(ways);
+                return Ok(waysDTO);
             }
             catch (Exception ex)
             {

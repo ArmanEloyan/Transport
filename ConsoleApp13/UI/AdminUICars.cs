@@ -52,7 +52,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    carType = await _adminPanel.GetCarTypeAsync(carTypeId);
+                    carType = await _adminService.GetCarTypeAsync(carTypeId);
                     break;
                 }
                 catch (Exception ex)
@@ -64,7 +64,7 @@ namespace ConsoleApp13.UI
             try
             {
                 Car car = new Car(carMark, carModel, carYear, carType) { CarTypeId =carTypeId};
-                await _adminPanel.AddAsync(car);
+                await _adminService.AddAsync(car);
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                car = await _adminPanel.GetCarAsync(carId);
+                car = await _adminService.GetCarAsync(carId);
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace ConsoleApp13.UI
                 return;
             }
 
-            await _adminPanel.DeleteAsync(car);
+            await _adminService.DeleteAsync(car);
         }
 
         private async Task GetCar()
@@ -97,7 +97,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                car = await _adminPanel.GetCarAsync(id);
+                car = await _adminService.GetCarAsync(id);
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace ConsoleApp13.UI
         {
             try
             {
-                foreach (var car in await _adminPanel.GetAllCarsAsync())
+                foreach (var car in await _adminService.GetAllCarsAsync())
                 {
                     Console.WriteLine(car.DisplayInfo());
                 }
@@ -132,14 +132,14 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    car = await _adminPanel.GetCarAsync(id);
+                    car = await _adminService.GetCarAsync(id);
                 }
                 catch (Exception ex)
                 {
                     Helper.ErrorMessage(ex.Message);
                     return;
                 }
-
+                Console.WriteLine("idddd = "+car.Id);
                 Console.WriteLine("What you want to change?");
                 int option = "1. Mark | 2. Model | 3. Year | 4. Type | 0. Back".TryConvertWithMessage<int>(true, ConsoleColor.Blue);
 
@@ -172,7 +172,7 @@ namespace ConsoleApp13.UI
 
                             try
                             {
-                                carType = await _adminPanel.GetCarTypeAsync(carTypeId);
+                                carType = await _adminService.GetCarTypeAsync(carTypeId);
                                 car.Type = carType;
                                 break;
                             }
@@ -188,7 +188,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    await _adminPanel.UpdateAsync(car);
+                    await _adminService.UpdateAsync(car);
                     return;
                 }
                 catch (Exception ex)

@@ -57,7 +57,7 @@ namespace ConsoleApp13.UI
             try
             {
                 CarType carType = new CarType(name, coef);
-                await _adminPanel.AddAsync(carType);
+                await _adminService.AddAsync(carType);
             }
             catch (Exception ex)
             {
@@ -72,8 +72,8 @@ namespace ConsoleApp13.UI
 
             try
             {
-                CarType carType = await _adminPanel.GetCarTypeAsync(id);
-                await _adminPanel.DeleteAsync(carType);
+                CarType carType = await _adminService.GetCarTypeAsync(id);
+                await _adminService.DeleteAsync(carType);
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace ConsoleApp13.UI
             int id = "Enter car type ID: ".TryConvert<int>(false);
             try
             {
-                carType = await _adminPanel.GetCarTypeAsync(id);
+                carType = await _adminService.GetCarTypeAsync(id);
             }
             catch (Exception ex)
             {
@@ -116,7 +116,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                await _adminPanel.UpdateAsync(carType);
+                await _adminService.UpdateAsync(carType);
             }
             catch (Exception ex)
             {
@@ -128,7 +128,7 @@ namespace ConsoleApp13.UI
         {
             try
             {
-                foreach (var carType in await _adminPanel.GetAllCarTypesAsync())
+                foreach (var carType in await _adminService.GetAllCarTypesAsync())
                 {
                     Console.WriteLine(carType.DisplayInfo() + "\n");
                 }
@@ -144,7 +144,7 @@ namespace ConsoleApp13.UI
             int id = "Enter car type ID: ".TryConvert<int>(false);
             try
             {
-                CarType carType = await _adminPanel.GetCarTypeAsync(id);
+                CarType carType = await _adminService.GetCarTypeAsync(id);
                 Console.WriteLine(carType.DisplayInfo() + "\n");
             }
             catch (Exception ex)

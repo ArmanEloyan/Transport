@@ -1,6 +1,7 @@
 ﻿using ConsoleApp13.Entities;
 using ConsoleApp13.Models;
 using ConsoleApp13.Repos;
+using ConsoleApp13.Services;
 using ConsoleApp13.UI;
 
 namespace ConsoleApp13
@@ -20,8 +21,8 @@ namespace ConsoleApp13
             IRepository<CarType, int> carTypeRepo = new Repository<CarType, int>(client, $"{Url}/cartype");
             TransportCompanyOrderSystem orderSystem = new TransportCompanyOrderSystem(orderRepo);
 
-            AdminPanel adminPanel = new AdminPanel(citiesRepo, carRepo, waysRepo, orderRepo, carTypeRepo);
-            UserPanel userPanel = new UserPanel(citiesRepo, carRepo, waysRepo, orderRepo);
+            AdminService adminPanel = new AdminService(citiesRepo, carRepo, waysRepo, orderRepo, carTypeRepo);
+            UserService userPanel = new UserService(citiesRepo, carRepo, waysRepo, orderRepo);
             MainUI ui = new MainUI(new AdminUI(adminPanel), new UserUI(userPanel, orderSystem));
             await ui.MainMenuShow();
         }

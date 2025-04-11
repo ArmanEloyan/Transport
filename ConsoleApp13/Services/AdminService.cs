@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using ConsoleApp13.Entities;
 using ConsoleApp13.Repos;
 
-namespace ConsoleApp13
+namespace ConsoleApp13.Services
 {
-    internal class AdminPanel // // s_CitiesRepo, s_CarRepo, s_WaysRepo
+    internal class AdminService // // s_CitiesRepo, s_CarRepo, s_WaysRepo
     {
         private IRepository<City, int> _citiesRepo;
         private IRepository<Car, int> _carRepo;
@@ -16,7 +16,7 @@ namespace ConsoleApp13
         private IRepository<Order, int> _orderRepo;
         private IRepository<CarType, int> _carTypeRepo;
 
-        public AdminPanel(IRepository<City, int> citiesRepo, IRepository<Car, int> carRepo, IRepository<Way, int> waysRepo, IRepository<Order, int> orderRepo, IRepository<CarType, int> carTypeRepo)
+        public AdminService(IRepository<City, int> citiesRepo, IRepository<Car, int> carRepo, IRepository<Way, int> waysRepo, IRepository<Order, int> orderRepo, IRepository<CarType, int> carTypeRepo)
         {
             _citiesRepo = citiesRepo;
             _carRepo = carRepo;
@@ -32,7 +32,7 @@ namespace ConsoleApp13
                 throw new ArgumentNullException("City cannot be null");
             }
 
-         //   CityDTO
+            //   CityDTO
             await _citiesRepo.AddAsync(city);
         }
 
@@ -58,7 +58,7 @@ namespace ConsoleApp13
 
         public async Task AddAsync(Way way)
         {
-            if(way == null)
+            if (way == null)
             {
                 throw new ArgumentNullException("Way cannot be null");
             }

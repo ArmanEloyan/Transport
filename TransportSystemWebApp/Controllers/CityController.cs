@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Models;
 using TransportSystemWebApp.Mappers;
+using AutoMapper;
 
 namespace TransportSystemWebApp.Controllers
 {
@@ -11,20 +12,20 @@ namespace TransportSystemWebApp.Controllers
     public class CityController : Controller
     {
         private readonly IService<City> _cityService;
-        private readonly IMapper<CityDTO, City> _cityMapper;
+        private readonly IMapper _cityMapper;
 
-        public CityController(IService<City> cityService, IMapper<CityDTO, City> cityMapper)
+        public CityController(IService<City> cityService, IMapper cityMapper)
         {
             _cityService = cityService;
             _cityMapper = cityMapper;
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult> AddCity(CityDTO cityDTO)
+        public async Task<ActionResult> AddCity([FromBody] CityCreateDTO cityDTO)
         {
             try
             {
-                City city = _cityMapper.Map(cityDTO);
+                City city = _cityMapper.Map<City>(cityDTO);
                 await _cityService.AddAsync(city);
 
                 return Ok(city);
@@ -53,11 +54,12 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ActionResult> Update([FromBody] City city)
+        public async Task<ActionResult> Update([FromBody] CityGetOrUpdateDTO city)
         {
             try
             {
-                await _cityService.UpdateAsync(city);
+                City cityUpdate = _cityMapper.Map<City>(city);
+                await _cityService.UpdateAsync(cityUpdate);
                 return Ok(city);
             }
             catch (Exception ex)
@@ -67,17 +69,19 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<ActionResult<City>> GetCityAsync(int id)
+        public async Task<ActionResult<CityGetOrUpdateDTO>> GetCityAsync(int id)
         {
             try
             {
-                var city = await _cityService.GetAsync(c=>c.Id == id);
+                City city = await _cityService.GetAsync(c => c.Id == id);
+                CityGetOrUpdateDTO cityGet = _cityMapper.Map<CityGetOrUpdateDTO>(city);
+
                 if (city == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(city);
+                return Ok(cityGet);
             }
             catch (Exception ex)
             {
@@ -86,11 +90,13 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<City>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<CityGetOrUpdateDTO>>> GetAllAsync()
         {
             try 
             {
-                return Ok(await _cityService.GetAllAsync());
+                IEnumerable<City> cities = await _cityService.GetAllAsync();
+                IEnumerable<CityGetOrUpdateDTO> citiesDTO = _cityMapper.Map<IEnumerable<CityGetOrUpdateDTO>>(cities);
+                return Ok(citiesDTO);
             }
             catch (Exception ex)
             {

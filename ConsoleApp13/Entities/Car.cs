@@ -13,9 +13,7 @@ public class Car
 
     public bool IsOperable { get; set; }
 
-    [JsonIgnore]
     public CarType Type { get; set; }
-    public List<Order> Orders { get; set; }
 
     public string Mark
     {

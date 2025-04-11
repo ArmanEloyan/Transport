@@ -1,7 +1,9 @@
+using AutoMapper;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Mappers;
 using TransportSystemWebApp.Models;
 using TransportSystemWebApp.Services;
+
 
 namespace TransportSystemWebApp
 {
@@ -30,13 +32,15 @@ namespace TransportSystemWebApp
             builder.Services.AddSingleton<IService<CarType>, Service<CarType>>();
             builder.Services.AddSingleton<IService<Order>, Service<Order>>();
 
-            builder.Services.AddSingleton<IMapper<CityDTO, City>, CityMapper>();
-            builder.Services.AddSingleton<IMapper<WayDTO, Way>, WayMapper>();
-            builder.Services.AddSingleton<IMapper<CarDTO, Car>, CarMapper>();
-            builder.Services.AddSingleton<IMapper<CarTypeDTO, CarType>, CarTypeMapper>();
-            builder.Services.AddSingleton<IMapper<OrderDTO, Order>, OrderMapper>();
+            builder.Services.AddAutoMapper(typeof(Program));
+
+            // AutoMapper.ServiceCollectionExtensions.AddAutoMapper(builder.Services, typeof(Program));
+
+
+
 
             builder.Services.AddSingleton<DataContext>();
+
 
 
             var app = builder.Build();

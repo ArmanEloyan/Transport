@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp13
+namespace ConsoleApp13.Services
 {
-    internal class UserPanel 
+    internal class UserService
     {
-        private readonly IRepository<City,int> _citiesRepo;
+        private readonly IRepository<City, int> _citiesRepo;
         private readonly IRepository<Car, int> _carRepo;
         private readonly IRepository<Way, int> _waysRepo;
         private readonly IRepository<Order, int> _orderRepo;
 
-        public UserPanel(IRepository<City, int> citiesRepo, IRepository<Car, int> carRepo, IRepository<Way, int> waysRepo, IRepository<Order, int> ordeRepo)
+        public UserService(IRepository<City, int> citiesRepo, IRepository<Car, int> carRepo, IRepository<Way, int> waysRepo, IRepository<Order, int> ordeRepo)
         {
             _citiesRepo = citiesRepo;
             _carRepo = carRepo;

@@ -2,8 +2,11 @@
 
 namespace TransportSystemWebApp.Models
 {
-    public class WayDTO
+    public class WayUpdateDTO
     {
+        [Required(ErrorMessage = "Id is required")]
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "CityFromId is required")]
         public int CityFromId { get; set; }
 

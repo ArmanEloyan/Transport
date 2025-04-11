@@ -14,6 +14,6 @@ namespace TransportSystemWebApp.Services
         Task UpdateAsync(TEntity newEntity);
         Task DeleteAsync(TEntity value);
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IQueryable<TEntity>> GetAllAsync();
     }
 }

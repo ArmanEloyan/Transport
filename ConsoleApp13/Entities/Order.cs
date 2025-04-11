@@ -29,6 +29,9 @@ public class Order
         WayObj = way;
         CarObj = car;
         Price = price;
+
+        WayId = way.Id;
+        CarId = car.Id;
     }
 
     public Order()

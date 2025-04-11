@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Mappers;
 using TransportSystemWebApp.Models;
@@ -11,20 +12,20 @@ namespace TransportSystemWebApp.Controllers
     public class OrderController : Controller
     {
         private readonly IService<Order> _orderTypeService;
-        private readonly IMapper<OrderDTO, Order> _orderMapper;
+        private readonly IMapper _orderMapper;
 
-        public OrderController(IService<Order> orderService, IMapper<OrderDTO, Order> orderMapper)
+        public OrderController(IService<Order> orderService, IMapper orderMapper)
         {
             _orderTypeService = orderService;
             _orderMapper = orderMapper;
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult> AddOrder([FromQuery] OrderDTO orderDTO)
+        public async Task<ActionResult> AddOrder([FromBody] OrderCreateDTO orderDTO)
         {
             try
             {
-                Order order = _orderMapper.Map(orderDTO);
+                Order order = _orderMapper.Map<Order>(orderDTO);
                 await _orderTypeService.AddAsync(order);
 
                 return Ok(order);
@@ -51,11 +52,12 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ActionResult> Update([FromBody] Order order)
+        public async Task<ActionResult> Update([FromBody] OrderUpdateDTO order)
         {
             try
             {
-                await _orderTypeService.UpdateAsync(order);
+                Order orderUpdate = _orderMapper.Map<Order>(order);
+                await _orderTypeService.UpdateAsync(orderUpdate);
                 return Ok(order);
             }
             catch (Exception ex)
@@ -65,17 +67,18 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<ActionResult<Order>> GetCityAsync(int id)
+        public async Task<ActionResult<OrderGetDTO>> GetCityAsync(int id)
         {
             try
             {
                 Order order = await _orderTypeService.GetAsync(c => c.Id == id);
+                OrderGetDTO orderGetDTO = _orderMapper.Map<OrderGetDTO>(order);
                 if (order == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(order);
+                return Ok(orderGetDTO);
             }
             catch (Exception ex)
             {
@@ -84,11 +87,13 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<Order>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllAsync()
         {
             try
             {
-                return Ok(await _orderTypeService.GetAllAsync());
+                IEnumerable<Order> orders = await _orderTypeService.GetAllAsync();
+                IEnumerable<OrderGetDTO> ordersDTO = _orderMapper.Map<IEnumerable<OrderGetDTO>>(orders);
+                return Ok(ordersDTO);
             }
             catch (Exception ex)
             {

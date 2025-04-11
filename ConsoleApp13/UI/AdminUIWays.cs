@@ -40,7 +40,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityFromId = "Enter city from ID: ".TryConvert<int>(false);
-                cityFrom = await _adminPanel.GetCityAsync(cityFromId);
+                cityFrom = await _adminService.GetCityAsync(cityFromId);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace ConsoleApp13.UI
             try
             {
                 int cityToId = "Enter city to ID: ".TryConvert<int>(false);
-                cityTo = await _adminPanel.GetCityAsync(cityToId);
+                cityTo = await _adminService.GetCityAsync(cityToId);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace ConsoleApp13.UI
             try
             {
                 way = new Way(cityFrom, cityTo, price);
-                await _adminPanel.AddAsync(way);
+                await _adminService.AddAsync(way);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                way = await _adminPanel.GetWayAsync(id);
+                way = await _adminService.GetWayAsync(id);
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                await _adminPanel.DeleteAsync(way);
+                await _adminService.DeleteAsync(way);
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                way = await _adminPanel.GetWayAsync(id);
+                way = await _adminService.GetWayAsync(id);
             }
             catch (Exception ex)
             {
@@ -119,18 +119,17 @@ namespace ConsoleApp13.UI
 
         private async Task GetAllWays()
         {
-         //   try
-          //  {
-                foreach (var way in await _adminPanel.GetAllWaysAsync())
+            try
+            {
+                foreach (var way in await _adminService.GetAllWaysAsync())
                 {
-                    Console.WriteLine("test");
                     Console.WriteLine(way.DisplayInfo());
                 }
-          // }
-          //  catch (Exception ex)
-           // {
-           //     Helper.ErrorMessage(ex.Message);
-           // }
+            }
+            catch (Exception ex)
+            {
+                Helper.ErrorMessage(ex.Message);
+            }
         }
 
         private async Task UpdateWay()
@@ -142,7 +141,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    oldWayObj = await _adminPanel.GetWayAsync(id);
+                    oldWayObj = await _adminService.GetWayAsync(id);
                 }
                 catch (Exception ex)
                 {
@@ -159,7 +158,7 @@ namespace ConsoleApp13.UI
                         int idCityFrom = "Enter new City Id: ".TryConvert<int>(false);
                         try
                         {
-                            oldWayObj.CityFrom = await _adminPanel.GetCityAsync(idCityFrom);
+                            oldWayObj.CityFrom = await _adminService.GetCityAsync(idCityFrom);
                         }
                         catch (Exception ex)
                         {
@@ -170,7 +169,7 @@ namespace ConsoleApp13.UI
                         int idCityTo = "Enter new City Id: ".TryConvert<int>(false);
                         try
                         {
-                            oldWayObj.CityTo = await _adminPanel.GetCityAsync(idCityTo);
+                            oldWayObj.CityTo = await _adminService.GetCityAsync(idCityTo);
                         }
                         catch (Exception ex)
                         {
@@ -193,7 +192,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    await _adminPanel.UpdateAsync(oldWayObj);
+                    await _adminService.UpdateAsync(oldWayObj);
                 }
                 catch (Exception ex)
                 {

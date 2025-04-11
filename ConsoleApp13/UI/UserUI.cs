@@ -1,4 +1,5 @@
 ﻿using ConsoleApp13.Entities;
+using ConsoleApp13.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace ConsoleApp13.UI
 {
     internal class UserUI
     {
-        private UserPanel _userPanel;
+        private UserService _userService;
         private TransportCompanyOrderSystem _transportCompanyOrderSystem;
 
-        public UserUI(UserPanel userPanel, TransportCompanyOrderSystem transportCompanyOrderSystem)
+        public UserUI(UserService userPanel, TransportCompanyOrderSystem transportCompanyOrderSystem)
         {
-            _userPanel = userPanel;
+            _userService = userPanel;
             _transportCompanyOrderSystem = transportCompanyOrderSystem;
         }
 
@@ -75,7 +76,14 @@ namespace ConsoleApp13.UI
 
             if (payOption == 1)
             {
-                _transportCompanyOrderSystem.CompleteOrder(order);
+                try
+                {
+                    _transportCompanyOrderSystem.CompleteOrder(order);
+                }
+                catch (Exception ex)
+                {
+                    Helper.ErrorMessage(ex.Message);
+                }
             }
             else
             {
@@ -91,7 +99,7 @@ namespace ConsoleApp13.UI
                 int id = "Enter Way Id: ".TryConvert<int>(false);
                 try
                 {
-                    return await _userPanel.GetWay(id);
+                    return await _userService.GetWay(id);
                 }
                 catch (Exception ex)
                 {
@@ -144,7 +152,7 @@ namespace ConsoleApp13.UI
 
                 try
                 {
-                    return await _userPanel.GetCar(carId);
+                    return await _userService.GetCar(carId);
                 }
                 catch (Exception ex)
                 {
@@ -173,7 +181,7 @@ namespace ConsoleApp13.UI
         {
             try
             {
-                foreach (var car in await _userPanel.GetAllCars())
+                foreach (var car in await _userService.GetAllCars())
                 {
                     Console.WriteLine(car.DisplayInfo());
                 }
@@ -188,7 +196,7 @@ namespace ConsoleApp13.UI
         {
             try
             {
-                foreach (var way in await _userPanel.GetAllWays())
+                foreach (var way in await _userService.GetAllWays())
                 {
                     Console.WriteLine(way.DisplayInfo());
                 }

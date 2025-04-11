@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Mappers;
 using TransportSystemWebApp.Models;
@@ -11,29 +12,26 @@ namespace TransportSystemWebApp.Controllers
     public class CarController : Controller
     {
         private readonly IService<Car> _carService;
-        private readonly IMapper<CarDTO, Car> _carMapper;
+        private readonly IMapper _carMapper;
 
-        public CarController(IService<Car> carService, IMapper<CarDTO, Car> carMapper)
+        public CarController(IService<Car> carService, IMapper carMapper)
         {
             _carService = carService;
             _carMapper = carMapper;
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult> AddCar([FromBody] CarDTO carDTO)
+        public async Task<ActionResult> AddCar([FromBody] CarCreateDTO carCreateDTO)
         {
-           // Console.WriteLine(carDTO.CarTypeId);
             try
             {
-                Car car = _carMapper.Map(carDTO);
+                Car car = _carMapper.Map<Car>(carCreateDTO);
                 await _carService.AddAsync(car);
 
                 return Ok(car);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ INNER EXCEPTION:");
-                Console.WriteLine(ex.InnerException?.Message ?? ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -54,11 +52,11 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ActionResult> Update([FromBody] CarDTO carDTO)
+        public async Task<ActionResult> Update([FromBody] CarUpdateDTO carUpdateDTO)
         {
             try
             {
-                Car car = _carMapper.Map(carDTO);
+                Car car = _carMapper.Map<Car>(carUpdateDTO);
                 await _carService.UpdateAsync(car);
                 return Ok(car);
             }
@@ -69,17 +67,17 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<ActionResult<Car>> GetCityAsync(int id)
+        public async Task<ActionResult<CarGetDTO>> GetCarAsync(int id)
         {
             try
             {
-                var car = await _carService.GetAsync(c => c.Id == id);
+                Car car = await _carService.GetAsync(c => c.Id == id);
                 if (car == null)
                 {
                     return NotFound();
                 }
-
-                return Ok(car);
+                CarGetDTO carGetDTO = _carMapper.Map<CarGetDTO>(car);
+                return Ok(carGetDTO);
             }
             catch (Exception ex)
             {
@@ -88,11 +86,13 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<Car>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<CarGetDTO>>> GetAllAsync()
         {
             try
             {
-                return Ok(await _carService.GetAllAsync());
+                IEnumerable<Car> cars = await _carService.GetAllAsync();
+                IEnumerable<CarGetDTO> carsDTO = _carMapper.Map<IEnumerable<CarGetDTO>>(cars);
+                return Ok(carsDTO);
             }
             catch (Exception ex)
             {

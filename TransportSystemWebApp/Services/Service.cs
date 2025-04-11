@@ -33,7 +33,7 @@ namespace TransportSystemWebApp.Services
 
         public async Task DeleteAsync(TEntity value) => await _repository.DeleteAsync(value);
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync() => await _repository.GetAllAsync();
+        public async Task<IQueryable<TEntity>> GetAllAsync() => await _repository.GetAllAsync();
 
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
         {

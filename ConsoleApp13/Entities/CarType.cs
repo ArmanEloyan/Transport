@@ -14,9 +14,6 @@ public class CarType
 
     public int Id { get; set; }
 
-    [JsonIgnore]
-    public List<Car> Cars { get; set; }
-
     public string Name
     {
         get { return _name; }

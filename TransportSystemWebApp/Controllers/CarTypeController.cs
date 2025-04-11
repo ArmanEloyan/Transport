@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TransportSystemWebApp.Entities;
 using TransportSystemWebApp.Mappers;
 using TransportSystemWebApp.Models;
@@ -11,20 +12,20 @@ namespace TransportSystemWebApp.Controllers
     public class CarTypeController : Controller
     {
         private readonly IService<CarType> _carTypeService;
-        private readonly IMapper<CarTypeDTO, CarType> _carTypeMapper;
+        private readonly IMapper _carTypeMapper;
 
-        public CarTypeController(IService<CarType> carTypeService, IMapper<CarTypeDTO, CarType> carTypeMapper)
+        public CarTypeController(IService<CarType> carTypeService, IMapper carTypeMapper)
         {
             _carTypeService = carTypeService;
             _carTypeMapper = carTypeMapper;
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult> AddCar(CarTypeDTO carDTO)
+        public async Task<ActionResult> AddCar(CarTypeCreateDTO carDTO)
         {
             try
             {
-                CarType carType = _carTypeMapper.Map(carDTO);
+                CarType carType = _carTypeMapper.Map<CarType>(carDTO);
                 await _carTypeService.AddAsync(carType);
 
                 return Ok(carType);
@@ -51,12 +52,13 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ActionResult> Update([FromBody] CarType carType)
+        public async Task<ActionResult> Update([FromBody] CarTypeGetOrUpdateDTO carType)
         {
             try
             {
-                await _carTypeService.UpdateAsync(carType);
-                return Ok(carType);
+                CarType car = _carTypeMapper.Map<CarType>(carType);
+                await _carTypeService.UpdateAsync(car);
+                return Ok(car);
             }
             catch (Exception ex)
             {
@@ -65,17 +67,18 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<ActionResult<CarType>> GetCityAsync(int id)
+        public async Task<ActionResult<CarTypeGetOrUpdateDTO>> GetCarTypeAsync(int id)
         {
             try
             {
-                var carType = await _carTypeService.GetAsync(c => c.Id == id);
+                CarType carType = await _carTypeService.GetAsync(c => c.Id == id);
+                CarTypeGetOrUpdateDTO carTypeDTO = _carTypeMapper.Map<CarTypeGetOrUpdateDTO>(carType);
                 if (carType == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(carType);
+                return Ok(carTypeDTO);
             }
             catch (Exception ex)
             {
@@ -84,11 +87,13 @@ namespace TransportSystemWebApp.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<CarType>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<CarTypeGetOrUpdateDTO>>> GetAllAsync()
         {
             try
             {
-                return Ok(await _carTypeService.GetAllAsync());
+                IEnumerable<CarType> carTypes = await _carTypeService.GetAllAsync();
+                IEnumerable<CarTypeGetOrUpdateDTO> carsDTO = _carTypeMapper.Map<IEnumerable<CarTypeGetOrUpdateDTO>>(carTypes);
+                return Ok(carsDTO);
             }
             catch (Exception ex)
             {

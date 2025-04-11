@@ -40,14 +40,14 @@ namespace TransportSystemWebApp.Services
         }
 
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate) 
-            => await ApplyIncludes(_dataContext.Set<TEntity>()).FirstOrDefaultAsync(predicate);
+            => await ApplyIncludes(_dataContext.Set<TEntity>().AsNoTracking()).FirstOrDefaultAsync(predicate);
 
-        public Task<IEnumerable<TEntity>> GetAllAsync() => Task.FromResult(ApplyIncludes(_dataContext.Set<TEntity>()).AsEnumerable());
+        public Task<IQueryable<TEntity>> GetAllAsync() => Task.FromResult(ApplyIncludes(_dataContext.Set<TEntity>().AsNoTracking()).AsQueryable());
 
         public async Task UpdateAsync(TEntity newEntity)
         {
             _dataContext.Set<TEntity>().Update(newEntity);
-           await _dataContext.SaveChangesAsync();
+            await _dataContext.SaveChangesAsync();
         }
 
         private IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> query)

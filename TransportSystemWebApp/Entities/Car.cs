@@ -13,10 +13,10 @@ public class Car
 
     public bool IsOperable { get; set; }
 
-    public CarType Type { get; set; }
+    public CarType? Type { get; set; }
 
     [JsonIgnore]
-    public List<Order> Orders { get; set; }
+    public List<Order>? Orders { get; set; }
 
     public string Mark
     {

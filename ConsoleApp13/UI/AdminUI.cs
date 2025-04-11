@@ -1,15 +1,16 @@
 ﻿using System;
 using ConsoleApp13.Entities;
+using ConsoleApp13.Services;
 
 namespace ConsoleApp13.UI
 {
     partial class AdminUI
     {
-        private AdminPanel _adminPanel;
+        private AdminService _adminService;
 
-        public AdminUI(AdminPanel adminPanel)
+        public AdminUI(AdminService adminPanel)
         {
-            _adminPanel = adminPanel;
+            _adminService = adminPanel;
         }
 
         public async Task ShowAdminPanel()
@@ -43,7 +44,7 @@ namespace ConsoleApp13.UI
 
         private async Task ShowOrders()
         {
-            foreach (var order in await _adminPanel.GetAllOrdersAsync())
+            foreach (var order in await _adminService.GetAllOrdersAsync())
             {
                 Console.WriteLine(order.DisplayInfo() + "\n");
             }
@@ -84,7 +85,7 @@ namespace ConsoleApp13.UI
             try
             {
                 City city = new City(cityName);
-                await _adminPanel.AddAsync(city);
+                await _adminService.AddAsync(city);
             }
             catch (Exception ex)
             {
@@ -99,8 +100,8 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = await _adminPanel.GetCityAsync(cityId);
-                await _adminPanel.DeleteAsync(city);
+                city = await _adminService.GetCityAsync(cityId);
+                await _adminService.DeleteAsync(city);
             }
             catch (Exception ex)
             {
@@ -116,7 +117,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                city = await _adminPanel.GetCityAsync(id);
+                city = await _adminService.GetCityAsync(id);
             }
             catch (Exception ex)
             {
@@ -131,7 +132,7 @@ namespace ConsoleApp13.UI
         {
             try
             {
-                foreach (var city in await _adminPanel.GetAllCitiesAsync())
+                foreach (var city in await _adminService.GetAllCitiesAsync())
                 {
                     Console.WriteLine(city.DisplayInfo());
                 }
@@ -149,7 +150,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-                oldCity = await _adminPanel.GetCityAsync(id);
+                oldCity = await _adminService.GetCityAsync(id);
             }
             catch (Exception ex)
             {
@@ -164,7 +165,7 @@ namespace ConsoleApp13.UI
 
             try
             {
-               await _adminPanel.UpdateAsync(oldCity);
+               await _adminService.UpdateAsync(oldCity);
             }
             catch (Exception ex)
             {

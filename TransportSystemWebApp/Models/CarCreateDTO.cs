@@ -2,7 +2,7 @@
 
 namespace TransportSystemWebApp.Models
 {
-    public class CarDTO
+    public class CarCreateDTO
     {
         [Required(ErrorMessage = "CarTypeId is required")]
         public int CarTypeId { get; set; }
